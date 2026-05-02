@@ -1,8 +1,14 @@
 import AppKit
 
+enum HistoryEntryKind {
+    case image
+    case color(hex: String)
+}
+
 struct HistoryEntry {
     let fileURL: URL
     let createdAt: Date
+    let kind: HistoryEntryKind
 }
 
 final class HistoryManager {
@@ -57,6 +63,24 @@ final class HistoryManager {
         }
     }
 
+    func addColor(hex: String) {
+        let normalized = hex.uppercased()
+        queue.async { [weak self] in
+            guard let self = self else { return }
+            let name = Self.filenameFormatter.string(from: Date()) + ".color"
+            let url = self.directoryURL.appendingPathComponent(name)
+            do {
+                try normalized.write(to: url, atomically: true, encoding: .utf8)
+            } catch {
+                return
+            }
+            self.pruneToLimit()
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .historyDidUpdate, object: nil)
+            }
+        }
+    }
+
     func entries() -> [HistoryEntry] {
         let fm = FileManager.default
         guard let urls = try? fm.contentsOfDirectory(
@@ -67,15 +91,26 @@ final class HistoryManager {
             return []
         }
         let items: [HistoryEntry] = urls.compactMap { url in
-            guard url.pathExtension.lowercased() == "png" else { return nil }
+            let ext = url.pathExtension.lowercased()
             let date = (try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate) ?? .distantPast
-            return HistoryEntry(fileURL: url, createdAt: date)
+            switch ext {
+            case "png":
+                return HistoryEntry(fileURL: url, createdAt: date, kind: .image)
+            case "color":
+                guard let hex = try? String(contentsOf: url, encoding: .utf8) else { return nil }
+                let trimmed = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+                guard !trimmed.isEmpty else { return nil }
+                return HistoryEntry(fileURL: url, createdAt: date, kind: .color(hex: trimmed))
+            default:
+                return nil
+            }
         }
         return items.sorted { $0.createdAt > $1.createdAt }
     }
 
     func image(for entry: HistoryEntry) -> NSImage? {
-        NSImage(contentsOf: entry.fileURL)
+        guard case .image = entry.kind else { return nil }
+        return NSImage(contentsOf: entry.fileURL)
     }
 
     func clearAll() {

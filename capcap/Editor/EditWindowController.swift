@@ -644,6 +644,7 @@ class EditWindowController {
             pasteboard.clearContents()
             pasteboard.setString(hex, forType: .string)
 
+            HistoryManager.shared.addColor(hex: hex)
             ToastWindow.show(message: L10n.colorCopied(hex), on: self?.screen)
         }
     }

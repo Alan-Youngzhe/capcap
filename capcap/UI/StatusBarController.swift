@@ -90,18 +90,28 @@ class StatusBarController: NSObject {
     }
 
     @objc fileprivate func historyItemClicked(_ sender: Any?) {
-        let url: URL?
-        if let item = sender as? NSMenuItem {
-            url = item.representedObject as? URL
-        } else if let row = sender as? HistoryMenuRow {
-            url = row.fileURL
+        let entry: HistoryEntry?
+        if let row = sender as? HistoryMenuRow {
+            entry = row.entry
             row.enclosingMenuItem?.menu?.cancelTracking()
+        } else if let item = sender as? NSMenuItem,
+                  let stored = item.representedObject as? HistoryEntry {
+            entry = stored
         } else {
-            url = nil
+            entry = nil
         }
-        guard let url = url, let image = NSImage(contentsOf: url) else { return }
-        ClipboardManager.copyToClipboard(image: image)
-        ToastWindow.show()
+        guard let entry = entry else { return }
+        switch entry.kind {
+        case .image:
+            guard let image = NSImage(contentsOf: entry.fileURL) else { return }
+            ClipboardManager.copyToClipboard(image: image)
+            ToastWindow.show()
+        case .color(let hex):
+            let pasteboard = NSPasteboard.general
+            pasteboard.clearContents()
+            pasteboard.setString(hex, forType: .string)
+            ToastWindow.show(message: L10n.colorCopied(hex))
+        }
     }
 
     @objc private func clearHistoryClicked() {
@@ -132,13 +142,13 @@ extension StatusBarController: NSMenuDelegate {
         for entry in entries {
             let item = NSMenuItem()
             let row = HistoryMenuRow(
-                fileURL: entry.fileURL,
+                entry: entry,
                 timestamp: formatter.string(from: entry.createdAt),
                 target: self,
                 action: #selector(historyItemClicked(_:))
             )
             item.view = row
-            item.representedObject = entry.fileURL
+            item.representedObject = entry
             menu.addItem(item)
         }
 
@@ -156,23 +166,33 @@ private final class HistoryMenuRow: NSView {
     static let verticalPadding: CGFloat = 6
     static let labelHeight: CGFloat = 14
     static let spacing: CGFloat = 4
+    static let maxThumbnailHeight: CGFloat = 180
+    static let colorSwatchSize: CGFloat = 28
 
-    let fileURL: URL
+    let entry: HistoryEntry
     private weak var target: AnyObject?
     private let action: Selector
     private let timeLabel: NSTextField
-    private let imageView: NSImageView
     private var trackingArea: NSTrackingArea?
     private var isHighlighted = false
 
-    init(fileURL: URL, timestamp: String, target: AnyObject, action: Selector) {
-        self.fileURL = fileURL
+    init(entry: HistoryEntry, timestamp: String, target: AnyObject, action: Selector) {
+        self.entry = entry
         self.target = target
         self.action = action
 
-        let imageWidth = Self.itemWidth - Self.horizontalPadding * 2
-        let (thumb, thumbHeight) = Self.makeThumbnail(url: fileURL, width: imageWidth)
-        let totalHeight = Self.verticalPadding * 2 + Self.labelHeight + Self.spacing + thumbHeight
+        let contentWidth = Self.itemWidth - Self.horizontalPadding * 2
+        let previewBlock: (NSView, CGFloat) = {
+            switch entry.kind {
+            case .image:
+                return Self.makeImagePreview(url: entry.fileURL, maxWidth: contentWidth)
+            case .color(let hex):
+                return Self.makeColorPreview(hex: hex, maxWidth: contentWidth)
+            }
+        }()
+        let preview = previewBlock.0
+        let previewHeight = previewBlock.1
+        let totalHeight = Self.verticalPadding * 2 + Self.labelHeight + Self.spacing + previewHeight
 
         timeLabel = NSTextField(labelWithString: timestamp)
         timeLabel.font = NSFont.monospacedDigitSystemFont(ofSize: 11, weight: .regular)
@@ -180,28 +200,15 @@ private final class HistoryMenuRow: NSView {
         timeLabel.frame = NSRect(
             x: Self.horizontalPadding,
             y: totalHeight - Self.verticalPadding - Self.labelHeight,
-            width: imageWidth,
+            width: contentWidth,
             height: Self.labelHeight
         )
         timeLabel.autoresizingMask = [.minYMargin]
 
-        imageView = NSImageView(frame: NSRect(
-            x: Self.horizontalPadding,
-            y: Self.verticalPadding,
-            width: imageWidth,
-            height: thumbHeight
-        ))
-        imageView.imageScaling = .scaleProportionallyUpOrDown
-        imageView.imageAlignment = .alignCenter
-        imageView.image = thumb
-        imageView.wantsLayer = true
-        imageView.layer?.cornerRadius = 4
-        imageView.layer?.masksToBounds = true
-
         super.init(frame: NSRect(x: 0, y: 0, width: Self.itemWidth, height: totalHeight))
         autoresizingMask = [.width]
         addSubview(timeLabel)
-        addSubview(imageView)
+        addSubview(preview)
     }
 
     required init?(coder: NSCoder) {
@@ -248,18 +255,32 @@ private final class HistoryMenuRow: NSView {
         }
     }
 
-    private static func makeThumbnail(url: URL, width: CGFloat) -> (NSImage?, CGFloat) {
+    private static func makeImagePreview(url: URL, maxWidth: CGFloat) -> (NSView, CGFloat) {
         let fallbackHeight: CGFloat = 80
-        guard let source = NSImage(contentsOf: url) else {
-            return (nil, fallbackHeight)
+        let maxHeight = Self.maxThumbnailHeight
+        let imageView = NSImageView()
+        imageView.imageScaling = .scaleProportionallyUpOrDown
+        imageView.imageAlignment = .alignCenter
+        imageView.wantsLayer = true
+        imageView.layer?.cornerRadius = 4
+        imageView.layer?.masksToBounds = true
+
+        guard let source = NSImage(contentsOf: url),
+              source.size.width > 0, source.size.height > 0 else {
+            imageView.frame = NSRect(
+                x: Self.horizontalPadding,
+                y: Self.verticalPadding,
+                width: maxWidth,
+                height: fallbackHeight
+            )
+            return (imageView, fallbackHeight)
         }
+
         let srcSize = source.size
-        guard srcSize.width > 0, srcSize.height > 0 else {
-            return (source, fallbackHeight)
-        }
-        let scale = width / srcSize.width
-        let height = max(20, min(srcSize.height * scale, 180))
-        let target = NSSize(width: width, height: height)
+        let scale = min(maxWidth / srcSize.width, maxHeight / srcSize.height)
+        let drawWidth = max(20, srcSize.width * scale)
+        let drawHeight = max(20, srcSize.height * scale)
+        let target = NSSize(width: drawWidth, height: drawHeight)
         let thumb = NSImage(size: target)
         thumb.lockFocus()
         NSGraphicsContext.current?.imageInterpolation = .high
@@ -270,6 +291,55 @@ private final class HistoryMenuRow: NSView {
             fraction: 1.0
         )
         thumb.unlockFocus()
-        return (thumb, height)
+        imageView.image = thumb
+        let xOffset = Self.horizontalPadding + (maxWidth - drawWidth) / 2
+        imageView.frame = NSRect(x: xOffset, y: Self.verticalPadding, width: drawWidth, height: drawHeight)
+        return (imageView, drawHeight)
+    }
+
+    private static func makeColorPreview(hex: String, maxWidth: CGFloat) -> (NSView, CGFloat) {
+        let blockHeight = Self.colorSwatchSize
+        let container = NSView(frame: NSRect(
+            x: Self.horizontalPadding,
+            y: Self.verticalPadding,
+            width: maxWidth,
+            height: blockHeight
+        ))
+
+        let swatch = NSView(frame: NSRect(x: 0, y: 0, width: blockHeight, height: blockHeight))
+        swatch.wantsLayer = true
+        swatch.layer?.cornerRadius = 6
+        swatch.layer?.borderWidth = 1
+        swatch.layer?.borderColor = NSColor.separatorColor.cgColor
+        swatch.layer?.backgroundColor = (NSColor(hex: hex) ?? .black).cgColor
+        container.addSubview(swatch)
+
+        let hexLabel = NSTextField(labelWithString: hex.uppercased())
+        hexLabel.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .medium)
+        hexLabel.textColor = .labelColor
+        hexLabel.alignment = .left
+        hexLabel.frame = NSRect(
+            x: blockHeight + 8,
+            y: 0,
+            width: maxWidth - blockHeight - 8,
+            height: blockHeight
+        )
+        hexLabel.cell?.usesSingleLineMode = true
+        hexLabel.cell?.lineBreakMode = .byTruncatingTail
+        container.addSubview(hexLabel)
+
+        return (container, blockHeight)
+    }
+}
+
+private extension NSColor {
+    convenience init?(hex: String) {
+        var trimmed = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        if trimmed.hasPrefix("#") { trimmed.removeFirst() }
+        guard trimmed.count == 6, let value = UInt32(trimmed, radix: 16) else { return nil }
+        let r = CGFloat((value >> 16) & 0xFF) / 255.0
+        let g = CGFloat((value >> 8) & 0xFF) / 255.0
+        let b = CGFloat(value & 0xFF) / 255.0
+        self.init(srgbRed: r, green: g, blue: b, alpha: 1)
     }
 }
