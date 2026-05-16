@@ -25,19 +25,27 @@ final class ScrollCapturer {
         let adjustedScore: Double
     }
 
+    /// Result of a single capture attempt, used by auto-scroll to decide
+    /// whether the page kept producing fresh content or has bottomed out.
+    enum FrameOutcome {
+        /// A new frame with fresh content was stitched in.
+        case appended
+        /// The frame was a duplicate, too similar, or failed — no progress.
+        case noNewContent
+        /// The frame budget is exhausted; capturing should stop.
+        case atFrameLimit
+    }
+
     var onPreviewUpdated: ((NSImage) -> Void)?
 
     private let captureRect: CGRect
     private let screen: NSScreen
     private let captureQueue = DispatchQueue(label: "capcap.scroll-capture", qos: .userInitiated)
-    private let captureDelay: TimeInterval = 0.08
     private let maxFrames = 100
 
     private var frames: [CapturedFrame] = []
     private var overlaps: [Int] = []
     private var recentNewContentPixels: [Int] = []
-    private var pendingCapture: DispatchWorkItem?
-    private var pendingScrollDeltaPoints: CGFloat = 0
 
     // Incremental preview state
     private var previewBitmap: BitmapData?
@@ -59,30 +67,12 @@ final class ScrollCapturer {
         }
     }
 
-    func scheduleCapture(observedDeltaPoints: CGFloat = 0) {
-        captureQueue.async { [weak self] in
-            guard let self else { return }
-
-            self.pendingScrollDeltaPoints += abs(observedDeltaPoints)
-            self.pendingCapture?.cancel()
-
-            let workItem = DispatchWorkItem { [weak self] in
-                self?.captureFrameFromPendingScroll()
-            }
-
-            self.pendingCapture = workItem
-            self.captureQueue.asyncAfter(deadline: .now() + self.captureDelay, execute: workItem)
-        }
-    }
-
     func stopAndStitch() -> NSImage? {
         var result: NSImage?
 
         captureQueue.sync {
-            pendingCapture?.cancel()
-            pendingCapture = nil
-
-            captureFrameFromPendingScroll()
+            // One last frame so the final scrolled state is never missed.
+            captureFrame(expectedShiftPoints: 0)
 
             guard !frames.isEmpty else {
                 result = nil
@@ -100,32 +90,38 @@ final class ScrollCapturer {
         return result
     }
 
-    private func captureFrameFromPendingScroll() {
-        let expectedShiftPoints = pendingScrollDeltaPoints
-        pendingScrollDeltaPoints = 0
-        captureFrame(expectedShiftPoints: expectedShiftPoints)
+    /// Captures a frame synchronously and reports the outcome. Used by the
+    /// auto-scroll loop: it scrolls a fixed step, then calls this to learn
+    /// whether the step revealed new content (keep going) or not (page end).
+    func captureSynchronously(expectedShiftPoints: CGFloat) -> FrameOutcome {
+        var outcome: FrameOutcome = .noNewContent
+        captureQueue.sync {
+            outcome = captureFrame(expectedShiftPoints: expectedShiftPoints)
+        }
+        return outcome
     }
 
-    private func captureFrame(expectedShiftPoints: CGFloat) {
-        guard frames.count < maxFrames else { return }
+    @discardableResult
+    private func captureFrame(expectedShiftPoints: CGFloat) -> FrameOutcome {
+        guard frames.count < maxFrames else { return .atFrameLimit }
         guard
             let image = ScreenCapturer.capture(rect: captureRect, screen: screen),
             let bitmap = bitmapData(from: image)
         else {
-            return
+            return .noNewContent
         }
 
         let candidateFrame = CapturedFrame(image: image, bitmap: bitmap)
 
         if let previousFrame = frames.last,
            imagesAreNearlyIdentical(previousFrame.bitmap, candidateFrame.bitmap) {
-            return
+            return .noNewContent
         }
 
         guard let previousFrame = frames.last else {
             frames.append(candidateFrame)
             initPreview(from: candidateFrame)
-            return
+            return .appended
         }
 
         let scale = CGFloat(candidateFrame.bitmap.height) / max(candidateFrame.image.size.height, 1)
@@ -144,12 +140,13 @@ final class ScrollCapturer {
 
         let minimumNewRows = max(8, candidateFrame.bitmap.height / 200)
         let newRows = candidateFrame.bitmap.height - overlap
-        guard newRows >= minimumNewRows else { return }
+        guard newRows >= minimumNewRows else { return .noNewContent }
 
         frames.append(candidateFrame)
         overlaps.append(overlap)
         rememberNewContentPixels(newRows)
         appendToPreview(candidateFrame.bitmap, overlapPixels: overlap)
+        return .appended
     }
 
     // MARK: - Incremental Preview

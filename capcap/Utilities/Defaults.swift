@@ -80,6 +80,14 @@ enum L10n {
     // Toast
     static var copiedToClipboard: String { lang == .zh ? "已添加到剪贴板" : "Copied to clipboard" }
     static var mergedLongScreenshot: String { lang == .zh ? "已合并长截图" : "Long screenshot merged" }
+    static var autoScrollPermissionNeeded: String {
+        lang == .zh
+            ? "长截图需要辅助功能权限，请在系统设置 → 隐私与安全性 → 辅助功能中授权 capcap"
+            : "Scroll capture needs Accessibility access — grant capcap in System Settings → Privacy & Security → Accessibility."
+    }
+    static var cropLongScreenshotHint: String {
+        lang == .zh ? "拖动上下边裁剪长图，回车或点对勾确认" : "Drag the top/bottom edges to crop — press Enter or tap ✓"
+    }
     static func colorCopied(_ hex: String) -> String {
         lang == .zh ? "已复制颜色 \(hex)" : "Copied color \(hex)"
     }
