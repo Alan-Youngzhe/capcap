@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.5] - 2026-05-17
+
+### Added
+- `feat(update): auto-download and install updates with version skipping` (fce4a4a)
+- `feat(capture): support editing clipboard images via image-edit shortcut` (137b42d)
+- `feat(about): add expandable error log viewer for crash reports` (bd603ae)
+
+### Fixed
+- `fix(about): keep error log chevron rotating around its center` (0c13611)
+- `fix(beautify): keep size label visible above gradient frame` (dd653f4)
+
 ## [1.1.4] - 2026-05-17
 
 ### Added
