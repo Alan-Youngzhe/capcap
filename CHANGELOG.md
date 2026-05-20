@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.5] - 2026-05-20
+
+### Fixed
+- Fix beautify toolbar controls (6bd2399)
+
+### Changed
+- Adjust menu bar icon size (573bdff)
+- Load menu bar icon from bundled SVG (85057a7)
+
 ## [1.3.4] - 2026-05-20
 
 ### Added
