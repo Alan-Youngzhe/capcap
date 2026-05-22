@@ -323,6 +323,8 @@
 "translationTestFailed" = "테스트 실패";
 "translationTestFailedTitle" = "저장했지만 연결 테스트에 실패했습니다";
 "translationProviderCustom" = "사용자 정의 (OpenAI 호환)";
+"translationMoveUp" = "위로 이동";
+"translationMoveDown" = "아래로 이동";
 
 /* Translation — target language names */
 "transLangChinese" = "중국어";

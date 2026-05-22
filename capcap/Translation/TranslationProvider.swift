@@ -173,6 +173,8 @@ struct TranslationConfig {
 /// Stores one JSON-encoded config plus an enabled flag per provider in
 /// UserDefaults — mirrors the upload `ProviderConfigStore` pattern.
 enum TranslationConfigStore {
+    private static let providerOrderKey = "translation.providerOrder"
+
     private static func configKey(for kind: TranslationProviderKind) -> String {
         "translation.\(kind.rawValue).config"
     }
@@ -238,8 +240,45 @@ enum TranslationConfigStore {
         isEnabled(kind) && isConfigured(kind)
     }
 
+    static func orderedKinds() -> [TranslationProviderKind] {
+        let saved = UserDefaults.standard.stringArray(forKey: providerOrderKey) ?? []
+        var seen = Set<TranslationProviderKind>()
+        var result: [TranslationProviderKind] = []
+
+        for raw in saved {
+            guard let kind = TranslationProviderKind(rawValue: raw), !seen.contains(kind) else { continue }
+            result.append(kind)
+            seen.insert(kind)
+        }
+
+        for kind in TranslationProviderKind.allCases where !seen.contains(kind) {
+            result.append(kind)
+            seen.insert(kind)
+        }
+
+        return result
+    }
+
+    static func setProviderOrder(_ kinds: [TranslationProviderKind]) {
+        var seen = Set<TranslationProviderKind>()
+        var normalized: [TranslationProviderKind] = []
+
+        for kind in kinds where !seen.contains(kind) {
+            normalized.append(kind)
+            seen.insert(kind)
+        }
+
+        for kind in TranslationProviderKind.allCases where !seen.contains(kind) {
+            normalized.append(kind)
+            seen.insert(kind)
+        }
+
+        UserDefaults.standard.set(normalized.map(\.rawValue), forKey: providerOrderKey)
+        NotificationCenter.default.post(name: .translationConfigDidChange, object: nil)
+    }
+
     static func usableKinds() -> [TranslationProviderKind] {
-        TranslationProviderKind.allCases.filter { isUsable($0) }
+        orderedKinds().filter { isUsable($0) }
     }
 }
 

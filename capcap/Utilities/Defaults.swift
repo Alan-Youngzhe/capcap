@@ -423,6 +423,8 @@ enum L10n {
     static var translationTestFailed: String { s("translationTestFailed") }
     static var translationTestFailedTitle: String { s("translationTestFailedTitle") }
     static var translationProviderCustom: String { s("translationProviderCustom") }
+    static var translationMoveUp: String { s("translationMoveUp") }
+    static var translationMoveDown: String { s("translationMoveDown") }
 
     // Translation — target language names
     static var transLangChinese: String { s("transLangChinese") }

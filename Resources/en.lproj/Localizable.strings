@@ -323,6 +323,8 @@
 "translationTestFailed" = "Test failed";
 "translationTestFailedTitle" = "Saved, but the connection test failed";
 "translationProviderCustom" = "Custom (OpenAI-compatible)";
+"translationMoveUp" = "Move up";
+"translationMoveDown" = "Move down";
 
 /* Translation — target language names */
 "transLangChinese" = "Chinese";

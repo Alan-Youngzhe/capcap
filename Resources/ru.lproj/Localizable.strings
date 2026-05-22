@@ -323,6 +323,8 @@
 "translationTestFailed" = "Проверка не пройдена";
 "translationTestFailedTitle" = "Сохранено, но проверка соединения не удалась";
 "translationProviderCustom" = "Свой (совместимый с OpenAI)";
+"translationMoveUp" = "Переместить вверх";
+"translationMoveDown" = "Переместить вниз";
 
 /* Translation — target language names */
 "transLangChinese" = "Китайский";

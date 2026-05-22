@@ -5,6 +5,7 @@ import AppKit
 final class TranslationSettingsPane: NSView {
     private var providerCards: [TranslationProviderCard] = []
     private var providersHeaderLabel: NSTextField!
+    private var providersStack: NSStackView!
 
     init() {
         super.init(frame: .zero)
@@ -33,13 +34,24 @@ final class TranslationSettingsPane: NSView {
         stack.addArrangedSubview(providersHeaderLabel)
 
         // Provider cards.
-        for kind in TranslationProviderKind.allCases {
+        providersStack = NSStackView()
+        providersStack.orientation = .vertical
+        providersStack.alignment = .leading
+        providersStack.spacing = 12
+        providersStack.translatesAutoresizingMaskIntoConstraints = false
+        stack.addArrangedSubview(providersStack)
+        providersStack.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
+
+        for kind in TranslationConfigStore.orderedKinds() {
             let card = TranslationProviderCard(kind: kind)
             card.translatesAutoresizingMaskIntoConstraints = false
+            card.onMoveUp = { [weak self] kind in self?.moveProvider(kind, offset: -1) }
+            card.onMoveDown = { [weak self] kind in self?.moveProvider(kind, offset: 1) }
             providerCards.append(card)
-            stack.addArrangedSubview(card)
-            card.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
+            providersStack.addArrangedSubview(card)
+            card.widthAnchor.constraint(equalTo: providersStack.widthAnchor).isActive = true
         }
+        refreshMoveButtons()
 
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: topAnchor, constant: 4),
@@ -52,6 +64,39 @@ final class TranslationSettingsPane: NSView {
     @objc private func onLanguageChanged() {
         providersHeaderLabel.stringValue = L10n.translationProvidersHeader
         for card in providerCards { card.refreshLocalization() }
+    }
+
+    private func moveProvider(_ kind: TranslationProviderKind, offset: Int) {
+        guard
+            let from = providerCards.firstIndex(where: { $0.kind == kind })
+        else { return }
+
+        let to = from + offset
+        guard providerCards.indices.contains(to) else { return }
+
+        let card = providerCards.remove(at: from)
+        providerCards.insert(card, at: to)
+        refreshProviderStack()
+        refreshMoveButtons()
+        TranslationConfigStore.setProviderOrder(providerCards.map(\.kind))
+    }
+
+    private func refreshProviderStack() {
+        for view in providersStack.arrangedSubviews {
+            providersStack.removeArrangedSubview(view)
+        }
+        for card in providerCards {
+            providersStack.addArrangedSubview(card)
+        }
+    }
+
+    private func refreshMoveButtons() {
+        for (index, card) in providerCards.enumerated() {
+            card.setMoveAvailability(
+                canMoveUp: index > 0,
+                canMoveDown: index < providerCards.count - 1
+            )
+        }
     }
 }
 
@@ -78,9 +123,14 @@ private final class TKTextField: NSTextField {
 // MARK: - Provider card
 
 private final class TranslationProviderCard: NSView {
-    private let kind: TranslationProviderKind
+    let kind: TranslationProviderKind
+    var onMoveUp: ((TranslationProviderKind) -> Void)?
+    var onMoveDown: ((TranslationProviderKind) -> Void)?
+
     private let titleLabel = NSTextField(labelWithString: "")
     private let enableSwitch = NSSwitch()
+    private let moveUpButton = NSButton()
+    private let moveDownButton = NSButton()
     private let apiKeyField = RevealableSecureField()
     private let modelField = TKTextField()
     private let endpointField = TKTextField()
@@ -89,10 +139,14 @@ private final class TranslationProviderCard: NSView {
     private let endpointLabel = NSTextField(labelWithString: "")
     private let saveButton = NSButton(title: "", target: nil, action: nil)
     private let clearButton = NSButton(title: "", target: nil, action: nil)
-    private let bodyContainer = NSView()
+    private let bodyContainer = ClippingView()
+    private var bodyHeightConstraint: NSLayoutConstraint!
+    private var measuredBodyHeight: CGFloat = 0
+    private var isExpanded: Bool
 
     init(kind: TranslationProviderKind) {
         self.kind = kind
+        self.isExpanded = TranslationConfigStore.isEnabled(kind)
         super.init(frame: .zero)
         wantsLayer = true
         layer?.cornerRadius = 12
@@ -102,9 +156,8 @@ private final class TranslationProviderCard: NSView {
         layer?.borderWidth = 1
         buildUI()
         loadFromStore()
-        let enabled = TranslationConfigStore.isEnabled(kind)
-        enableSwitch.state = enabled ? .on : .off
-        bodyContainer.isHidden = !enabled
+        enableSwitch.state = isExpanded ? .on : .off
+        bodyContainer.alphaValue = isExpanded ? 1 : 0
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -129,9 +182,18 @@ private final class TranslationProviderCard: NSView {
         enableSwitch.action = #selector(switchToggled)
         enableSwitch.translatesAutoresizingMaskIntoConstraints = false
 
-        let header = NSStackView(views: [titleLabel, flexSpacer(), enableSwitch])
+        configureIconButton(moveUpButton, symbolName: "chevron.up", label: L10n.translationMoveUp)
+        moveUpButton.target = self
+        moveUpButton.action = #selector(moveUpTapped)
+
+        configureIconButton(moveDownButton, symbolName: "chevron.down", label: L10n.translationMoveDown)
+        moveDownButton.target = self
+        moveDownButton.action = #selector(moveDownTapped)
+
+        let header = NSStackView(views: [titleLabel, flexSpacer(), moveUpButton, moveDownButton, enableSwitch])
         header.orientation = .horizontal
         header.alignment = .centerY
+        header.spacing = 6
         header.translatesAutoresizingMaskIntoConstraints = false
         outer.addArrangedSubview(header)
         header.widthAnchor.constraint(equalTo: outer.widthAnchor).isActive = true
@@ -143,12 +205,23 @@ private final class TranslationProviderCard: NSView {
         body.spacing = 10
         body.translatesAutoresizingMaskIntoConstraints = false
         bodyContainer.translatesAutoresizingMaskIntoConstraints = false
+        bodyContainer.wantsLayer = true
+        bodyContainer.layer?.masksToBounds = true
         bodyContainer.addSubview(body)
+
+        bodyHeightConstraint = bodyContainer.heightAnchor.constraint(equalToConstant: 0)
+        bodyHeightConstraint.priority = .required
+        bodyHeightConstraint.isActive = true
+
         NSLayoutConstraint.activate([
             body.topAnchor.constraint(equalTo: bodyContainer.topAnchor),
             body.leadingAnchor.constraint(equalTo: bodyContainer.leadingAnchor),
             body.trailingAnchor.constraint(equalTo: bodyContainer.trailingAnchor),
-            body.bottomAnchor.constraint(equalTo: bodyContainer.bottomAnchor),
+            {
+                let c = body.bottomAnchor.constraint(equalTo: bodyContainer.bottomAnchor)
+                c.priority = .defaultHigh
+                return c
+            }(),
         ])
 
         body.addArrangedSubview(makeFieldRow(apiKeyLabel, apiKeyField,
@@ -185,6 +258,17 @@ private final class TranslationProviderCard: NSView {
 
         outer.addArrangedSubview(bodyContainer)
         bodyContainer.widthAnchor.constraint(equalTo: outer.widthAnchor).isActive = true
+    }
+
+    override func layout() {
+        super.layout()
+        if measuredBodyHeight == 0, bounds.width > 0 {
+            bodyHeightConstraint.isActive = false
+            bodyContainer.layoutSubtreeIfNeeded()
+            measuredBodyHeight = bodyContainer.fittingSize.height
+            bodyHeightConstraint.isActive = true
+            bodyHeightConstraint.constant = isExpanded ? measuredBodyHeight : 0
+        }
     }
 
     private func makeFieldRow(_ label: NSTextField, _ field: any ProviderFieldInput,
@@ -253,7 +337,71 @@ private final class TranslationProviderCard: NSView {
         let on = enableSwitch.state == .on
         if on { TranslationConfigStore.save(currentConfig(), for: kind) }
         TranslationConfigStore.setEnabled(on, for: kind)
-        bodyContainer.isHidden = !on
+    }
+
+    @objc private func toggleExpanded() {
+        setExpanded(!isExpanded, animated: true)
+    }
+
+    override func mouseDown(with event: NSEvent) {
+        toggleExpanded()
+    }
+
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        let result = super.hitTest(point)
+        if let result, isPassThrough(result) { return self }
+        return result
+    }
+
+    private func isPassThrough(_ view: NSView) -> Bool {
+        if view === self { return false }
+        var v: NSView? = view
+        while let cur = v, cur !== self {
+            if cur is NSSwitch { return false }
+            if let btn = cur as? NSButton, btn.isEnabled { return false }
+            if let tf = cur as? NSTextField, tf.isEditable { return false }
+            if cur is NSTextView { return false }
+            if cur is NSScrollView { return false }
+            v = cur.superview
+        }
+        return true
+    }
+
+    private func setExpanded(_ expanded: Bool, animated: Bool) {
+        isExpanded = expanded
+        if measuredBodyHeight == 0 {
+            bodyHeightConstraint.isActive = false
+            bodyContainer.layoutSubtreeIfNeeded()
+            measuredBodyHeight = bodyContainer.fittingSize.height
+            bodyHeightConstraint.isActive = true
+        }
+
+        let target: CGFloat = expanded ? measuredBodyHeight : 0
+        let alpha: CGFloat = expanded ? 1 : 0
+        let updates = {
+            self.bodyHeightConstraint.constant = target
+            self.bodyContainer.alphaValue = alpha
+            self.window?.contentView?.layoutSubtreeIfNeeded()
+        }
+
+        if animated {
+            NSAnimationContext.runAnimationGroup { ctx in
+                ctx.duration = 0.22
+                ctx.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                ctx.allowsImplicitAnimation = true
+                updates()
+            }
+        } else {
+            updates()
+        }
+    }
+
+    @objc private func moveUpTapped() {
+        onMoveUp?(kind)
+    }
+
+    @objc private func moveDownTapped() {
+        onMoveDown?(kind)
     }
 
     @objc private func saveTapped() {
@@ -317,5 +465,20 @@ private final class TranslationProviderCard: NSView {
         endpointLabel.stringValue = endpointLabelText()
         saveButton.title = L10n.translationSave
         clearButton.title = L10n.translationClear
+        moveUpButton.toolTip = L10n.translationMoveUp
+        moveUpButton.setAccessibilityLabel(L10n.translationMoveUp)
+        moveDownButton.toolTip = L10n.translationMoveDown
+        moveDownButton.setAccessibilityLabel(L10n.translationMoveDown)
     }
+
+    func setMoveAvailability(canMoveUp: Bool, canMoveDown: Bool) {
+        moveUpButton.isEnabled = canMoveUp
+        moveUpButton.alphaValue = canMoveUp ? 1.0 : 0.35
+        moveDownButton.isEnabled = canMoveDown
+        moveDownButton.alphaValue = canMoveDown ? 1.0 : 0.35
+    }
+}
+
+private final class ClippingView: NSView {
+    override var wantsDefaultClipping: Bool { true }
 }

@@ -323,6 +323,8 @@
 "translationTestFailed" = "Échec du test";
 "translationTestFailedTitle" = "Enregistré, mais le test de connexion a échoué";
 "translationProviderCustom" = "Personnalisé (compatible OpenAI)";
+"translationMoveUp" = "Déplacer vers le haut";
+"translationMoveDown" = "Déplacer vers le bas";
 
 /* Translation — target language names */
 "transLangChinese" = "Chinois";

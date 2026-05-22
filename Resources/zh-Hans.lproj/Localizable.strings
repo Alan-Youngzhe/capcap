@@ -323,6 +323,8 @@
 "translationTestFailed" = "测试失败";
 "translationTestFailedTitle" = "已保存，但连接测试失败";
 "translationProviderCustom" = "自定义 (OpenAI 兼容)";
+"translationMoveUp" = "上移";
+"translationMoveDown" = "下移";
 
 /* Translation — target language names */
 "transLangChinese" = "中文";

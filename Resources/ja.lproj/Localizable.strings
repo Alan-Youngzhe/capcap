@@ -323,6 +323,8 @@
 "translationTestFailed" = "テスト失敗";
 "translationTestFailedTitle" = "保存しましたが、接続テストに失敗しました";
 "translationProviderCustom" = "カスタム (OpenAI 互換)";
+"translationMoveUp" = "上へ移動";
+"translationMoveDown" = "下へ移動";
 
 /* Translation — target language names */
 "transLangChinese" = "中国語";
