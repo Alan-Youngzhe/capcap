@@ -639,32 +639,6 @@ class SettingsView: NSView {
         stack.addArrangedSubview(shortcut.card)
         shortcut.card.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
 
-        // Text recognition shortcut card
-        let textRecognitionShortcut = buildShortcutCard(
-            title: L10n.textRecognitionShortcutHeader,
-            setAction: #selector(textRecognitionShortcutSetClicked),
-            restoreAction: #selector(textRecognitionShortcutRestoreClicked)
-        )
-        textRecognitionShortcutTitleLabel = textRecognitionShortcut.title
-        textRecognitionShortcutField = textRecognitionShortcut.field
-        textRecognitionShortcutSetButton = textRecognitionShortcut.setButton
-        textRecognitionShortcutRestoreButton = textRecognitionShortcut.restoreButton
-        stack.addArrangedSubview(textRecognitionShortcut.card)
-        textRecognitionShortcut.card.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
-
-        // Screenshot translation shortcut card
-        let screenshotTranslationShortcut = buildShortcutCard(
-            title: L10n.screenshotTranslationShortcutHeader,
-            setAction: #selector(screenshotTranslationShortcutSetClicked),
-            restoreAction: #selector(screenshotTranslationShortcutRestoreClicked)
-        )
-        screenshotTranslationShortcutTitleLabel = screenshotTranslationShortcut.title
-        screenshotTranslationShortcutField = screenshotTranslationShortcut.field
-        screenshotTranslationShortcutSetButton = screenshotTranslationShortcut.setButton
-        screenshotTranslationShortcutRestoreButton = screenshotTranslationShortcut.restoreButton
-        stack.addArrangedSubview(screenshotTranslationShortcut.card)
-        screenshotTranslationShortcut.card.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
-
         // Copy-to-clipboard (editor confirm) shortcut card
         let clipboardShortcut = buildShortcutCard(
             title: L10n.clipboardShortcutHeader,
@@ -744,6 +718,32 @@ class SettingsView: NSView {
         clipboardImagePinShortcutRestoreButton.toolTip = L10n.clipboardImagePinShortcutClear
         stack.addArrangedSubview(clipboardImagePinShortcut.card)
         clipboardImagePinShortcut.card.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
+
+        // Text recognition shortcut card
+        let textRecognitionShortcut = buildShortcutCard(
+            title: L10n.textRecognitionShortcutHeader,
+            setAction: #selector(textRecognitionShortcutSetClicked),
+            restoreAction: #selector(textRecognitionShortcutRestoreClicked)
+        )
+        textRecognitionShortcutTitleLabel = textRecognitionShortcut.title
+        textRecognitionShortcutField = textRecognitionShortcut.field
+        textRecognitionShortcutSetButton = textRecognitionShortcut.setButton
+        textRecognitionShortcutRestoreButton = textRecognitionShortcut.restoreButton
+        stack.addArrangedSubview(textRecognitionShortcut.card)
+        textRecognitionShortcut.card.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
+
+        // Screenshot translation shortcut card
+        let screenshotTranslationShortcut = buildShortcutCard(
+            title: L10n.screenshotTranslationShortcutHeader,
+            setAction: #selector(screenshotTranslationShortcutSetClicked),
+            restoreAction: #selector(screenshotTranslationShortcutRestoreClicked)
+        )
+        screenshotTranslationShortcutTitleLabel = screenshotTranslationShortcut.title
+        screenshotTranslationShortcutField = screenshotTranslationShortcut.field
+        screenshotTranslationShortcutSetButton = screenshotTranslationShortcut.setButton
+        screenshotTranslationShortcutRestoreButton = screenshotTranslationShortcut.restoreButton
+        stack.addArrangedSubview(screenshotTranslationShortcut.card)
+        screenshotTranslationShortcut.card.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
 
         let footer = NSStackView()
         footer.orientation = .horizontal
