@@ -52,6 +52,31 @@ enum TranslationLanguage: String, CaseIterable {
         }
     }
 
+    var localeIdentifier: String {
+        switch self {
+        case .chinese:    return "zh-Hans"
+        case .english:    return "en"
+        case .hindi:      return "hi"
+        case .spanish:    return "es"
+        case .french:     return "fr"
+        case .arabic:     return "ar"
+        case .bengali:    return "bn"
+        case .portuguese: return "pt"
+        case .russian:    return "ru"
+        case .urdu:       return "ur"
+        case .indonesian: return "id"
+        case .german:     return "de"
+        case .japanese:   return "ja"
+        case .korean:     return "ko"
+        case .turkish:    return "tr"
+        }
+    }
+
+    var localizedDisplayName: String {
+        let locale = Locale(identifier: Defaults.language.lprojName)
+        return locale.localizedString(forIdentifier: localeIdentifier) ?? displayName
+    }
+
     /// English name fed into the translation prompt.
     var promptName: String {
         switch self {
