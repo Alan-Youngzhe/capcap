@@ -4,6 +4,7 @@ import Foundation
 /// `appLanguage` UserDefaults value (kept stable for backward compatibility).
 enum AppLanguage: String, CaseIterable {
     case zh
+    case zhTW = "zh-Hant"
     case en
     case ja
     case ko
@@ -15,6 +16,7 @@ enum AppLanguage: String, CaseIterable {
     var lprojName: String {
         switch self {
         case .zh: return "zh-Hans"
+        case .zhTW: return "zh-Hant"
         default:  return rawValue
         }
     }
@@ -22,7 +24,8 @@ enum AppLanguage: String, CaseIterable {
     /// Native language name shown in the in-app language picker.
     var displayName: String {
         switch self {
-        case .zh: return "中文"
+        case .zh: return "简体中文"
+        case .zhTW: return "繁體中文"
         case .en: return "English"
         case .ja: return "日本語"
         case .ko: return "한국어"
@@ -36,6 +39,12 @@ enum AppLanguage: String, CaseIterable {
     static var systemDefault: AppLanguage {
         for code in Locale.preferredLanguages {
             let lower = code.lowercased()
+            if lower.hasPrefix("zh-hant") ||
+                lower.hasPrefix("zh-tw") ||
+                lower.hasPrefix("zh-hk") ||
+                lower.hasPrefix("zh-mo") {
+                return .zhTW
+            }
             if lower.hasPrefix("zh") { return .zh }
             if lower.hasPrefix("ja") { return .ja }
             if lower.hasPrefix("ko") { return .ko }

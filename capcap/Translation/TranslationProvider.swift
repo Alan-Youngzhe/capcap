@@ -24,6 +24,7 @@ enum TranslationLanguage: String, CaseIterable {
     static var appDefault: TranslationLanguage {
         switch Defaults.language {
         case .zh: return .chinese
+        case .zhTW: return .chinese
         case .en: return .english
         case .ja: return .japanese
         case .ko: return .korean
