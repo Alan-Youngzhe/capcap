@@ -40,7 +40,9 @@ final class UpdateChecker {
     private let repo = "realskyrin/capcap"
     private let throttleKey = "lastUpdateCheckAt"
     private let skippedVersionKey = "skippedUpdateVersion"
-    private let throttleInterval: TimeInterval = 24 * 60 * 60
+    private let shortcutTriggerDayKey = "automaticUpdateCheckShortcutTriggerDay"
+    private let shortcutTriggerCountKey = "automaticUpdateCheckShortcutTriggerCount"
+    private let automaticCheckShortcutTriggerCount = 1
 
     private(set) var state: UpdateState = .idle {
         didSet {
@@ -76,19 +78,41 @@ final class UpdateChecker {
         }
     }
 
-    /// Background check fired on launch. Skipped if a check already ran within
-    /// the last 24h so an app that launches often doesn't hammer the API.
-    func checkOnLaunchIfDue() {
-        if let last = UserDefaults.standard.object(forKey: throttleKey) as? Date,
-           Date().timeIntervalSince(last) < throttleInterval {
-            return
+    /// Silent automatic check tied to real usage rather than app launch. The
+    /// first screenshot-shortcut trigger of each local day checks GitHub unless
+    /// a check already ran today.
+    func checkFromScreenshotShortcutIfDue() {
+        let today = Self.dayKey(for: Date())
+        let defaults = UserDefaults.standard
+        var triggerCount = defaults.integer(forKey: shortcutTriggerCountKey)
+
+        if defaults.string(forKey: shortcutTriggerDayKey) != today {
+            defaults.set(today, forKey: shortcutTriggerDayKey)
+            triggerCount = 0
         }
+
+        triggerCount += 1
+        defaults.set(triggerCount, forKey: shortcutTriggerCountKey)
+
+        guard triggerCount == automaticCheckShortcutTriggerCount,
+              !hasCheckedToday,
+              !isBusy
+        else { return }
+
         check(manual: false)
     }
 
+    private var hasCheckedToday: Bool {
+        guard let last = UserDefaults.standard.object(forKey: throttleKey) as? Date else {
+            return false
+        }
+        return Calendar.autoupdatingCurrent.isDateInToday(last)
+    }
+
     /// Performs a check. `completion` fires on the main thread with the final
-    /// state. Manual checks ignore the 24h throttle and the skipped-version
-    /// preference; a background check stays silent about a skipped version.
+    /// state. Manual checks ignore the screenshot-shortcut gate and the
+    /// skipped-version preference; a background check stays silent about a
+    /// skipped version.
     func check(manual: Bool, completion: ((UpdateState) -> Void)? = nil) {
         guard !isBusy else {
             completion?(state)
@@ -111,7 +135,7 @@ final class UpdateChecker {
             guard let self = self else { return }
 
             // Record the attempt regardless of outcome so a failing network
-            // doesn't retry on every launch.
+            // doesn't retry on every screenshot shortcut trigger today.
             UserDefaults.standard.set(Date(), forKey: self.throttleKey)
 
             guard let http = response as? HTTPURLResponse, http.statusCode == 200,
@@ -301,6 +325,11 @@ final class UpdateChecker {
             if x != y { return x > y }
         }
         return false
+    }
+
+    private static func dayKey(for date: Date) -> String {
+        let components = Calendar.autoupdatingCurrent.dateComponents([.year, .month, .day], from: date)
+        return "\(components.year ?? 0)-\(components.month ?? 0)-\(components.day ?? 0)"
     }
 
     private static func components(_ version: String) -> [Int] {

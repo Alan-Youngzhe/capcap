@@ -73,10 +73,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self?.applyHotkeyState()
         }
         applyHotkeyState()
-
-        // Quietly look for a newer release (throttled to once per 24h). A hit
-        // surfaces only in the menu bar item and the About pane — no popup.
-        UpdateChecker.shared.checkOnLaunchIfDue()
     }
 
     private func applyHotkeyState() {
@@ -106,7 +102,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         keyMonitor?.isEnabled = true
         if Defaults.hasCustomScreenshotHotkey {
             HotkeyManager.shared.register { [weak self] in
-                self?.handleTrigger()
+                self?.handleTrigger(fromShortcut: true)
             }
             HotkeyManager.shared.registerCountdown { [weak self] in
                 self?.handleCountdownTrigger()
@@ -206,15 +202,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             return
         }
-        handleTrigger()
+        handleTrigger(fromShortcut: true)
     }
 
-    func handleTrigger() {
+    func handleTrigger(fromShortcut: Bool = false) {
         if recordingEngine != nil {
             stopRecordingAndSave()
             return
         }
         guard overlayController == nil, recordingEngine == nil else { return }
+        if fromShortcut {
+            UpdateChecker.shared.checkFromScreenshotShortcutIfDue()
+        }
         startCapture()
     }
 
