@@ -596,28 +596,73 @@ struct ArrowAnnotation: Annotation {
         // The drawn polygon flares out perpendicular to the spine by up to
         // headWidth/2 at the arrowhead's outer corners, which would sit
         // outside the spine-only rect. Inflate so erase/selection rect
-        // intersection tests cover the rendered pixels. Use the scaled
-        // head width so very short arrows don't over-inflate.
-        let endTangent: (dx: CGFloat, dy: CGFloat)
-        if let cp = controlPoint {
-            endTangent = (endPoint.x - cp.x, endPoint.y - cp.y)
-        } else {
-            endTangent = (endPoint.x - startPoint.x, endPoint.y - startPoint.y)
-        }
-        let length = hypot(endTangent.dx, endTangent.dy)
-        var headLength: CGFloat = max(22, lineWidth * 6.5)
-        var headWidth: CGFloat = max(22, lineWidth * 7.5)
-        if length > 0 && length < headLength {
-            headWidth *= length / headLength
-            headLength = length
-        }
-        let pad = headWidth / 2
-
+        // intersection tests cover the rendered pixels.
+        let pad = (arrowGeometry?.headWidth ?? 0) / 2
         return NSRect(
             x: minX - pad,
             y: minY - pad,
             width: maxX - minX + 2 * pad,
             height: maxY - minY + 2 * pad
+        )
+    }
+
+    /// Scaled geometry shared by `draw`, `containsPoint`, and `boundingRect`.
+    /// Returns `nil` when the arrow is degenerate (zero length).
+    private struct ArrowGeometry {
+        let length: CGFloat
+        let unitX: CGFloat
+        let unitY: CGFloat
+        let perpX: CGFloat
+        let perpY: CGFloat
+        let headLength: CGFloat
+        let headWidth: CGFloat
+        let neckHalf: CGFloat
+        let tailHalf: CGFloat
+        let neckIndent: CGFloat
+    }
+
+    private var arrowGeometry: ArrowGeometry? {
+        let dx: CGFloat
+        let dy: CGFloat
+        if let cp = controlPoint {
+            dx = endPoint.x - cp.x
+            dy = endPoint.y - cp.y
+        } else {
+            dx = endPoint.x - startPoint.x
+            dy = endPoint.y - startPoint.y
+        }
+        let length = sqrt(dx * dx + dy * dy)
+        guard length > 0 else { return nil }
+
+        var headLength: CGFloat = max(22, lineWidth * 6.5)
+        var headWidth: CGFloat = max(22, lineWidth * 7.5)
+        var neckHalf: CGFloat = max(3, lineWidth * 1.4)
+        var tailHalf: CGFloat = max(0.5, lineWidth * 0.25)
+
+        // Short arrow: scale the whole geometry down proportionally so the
+        // head's base never overshoots the tail and the polygon stays
+        // simple instead of self-intersecting.
+        if length < headLength {
+            let scale = length / headLength
+            headWidth *= scale
+            neckHalf *= scale
+            tailHalf *= scale
+            headLength = length
+        }
+
+        let unitX = dx / length
+        let unitY = dy / length
+        return ArrowGeometry(
+            length: length,
+            unitX: unitX,
+            unitY: unitY,
+            perpX: -unitY,
+            perpY: unitX,
+            headLength: headLength,
+            headWidth: headWidth,
+            neckHalf: neckHalf,
+            tailHalf: tailHalf,
+            neckIndent: headLength * 0.14
         )
     }
 
@@ -637,65 +682,26 @@ struct ArrowAnnotation: Annotation {
     }
 
     func draw(in context: CGContext, bounds: NSRect) {
+        guard let g = arrowGeometry else { return }
         context.setFillColor(color.cgColor)
 
-        // Tangent at the endpoint — drives the arrowhead orientation.
-        let endTangent: (dx: CGFloat, dy: CGFloat)
-        if let cp = controlPoint {
-            endTangent = (endPoint.x - cp.x, endPoint.y - cp.y)
-        } else {
-            endTangent = (endPoint.x - startPoint.x, endPoint.y - startPoint.y)
-        }
-        let length = sqrt(endTangent.dx * endTangent.dx + endTangent.dy * endTangent.dy)
-        guard length > 0 else { return }
-
-        // Wide, swept arrowhead with a concave base — gives the "big head,
-        // thin tail" silhouette. Shaft tapers from a thin tail into the head.
-        var headLength: CGFloat = max(22, lineWidth * 6.5)
-        var headWidth: CGFloat = max(22, lineWidth * 7.5)
-        var neckHalf: CGFloat = max(3, lineWidth * 1.4)
-        var tailHalf: CGFloat = max(0.5, lineWidth * 0.25)
-
-        // Short arrows: if the full-size head wouldn't fit between start
-        // and end, scale the whole arrow down proportionally so the head's
-        // base never overshoots the tail (which would self-intersect the
-        // polygon and render as a folded mess).
-        if length < headLength {
-            let scale = length / headLength
-            headWidth *= scale
-            neckHalf *= scale
-            tailHalf *= scale
-            headLength = length
-        }
-
-        // How far the concave base pulls forward toward the tip. Tuned so
-        // the outer "ear" corner sits around 40° — bigger value gives a
-        // sharper, more barb-like ear.
-        let neckIndent: CGFloat = headLength * 0.14
-
-        let unitX = endTangent.dx / length
-        let unitY = endTangent.dy / length
-        // Perpendicular (left side of the arrow when looking toward tip).
-        let perpX = -unitY
-        let perpY = unitX
-
         // Head base center and the concave neck point (closer to the tip).
-        let baseX = endPoint.x - unitX * headLength
-        let baseY = endPoint.y - unitY * headLength
-        let neckX = endPoint.x - unitX * (headLength - neckIndent)
-        let neckY = endPoint.y - unitY * (headLength - neckIndent)
+        let baseX = endPoint.x - g.unitX * g.headLength
+        let baseY = endPoint.y - g.unitY * g.headLength
+        let neckX = endPoint.x - g.unitX * (g.headLength - g.neckIndent)
+        let neckY = endPoint.y - g.unitY * (g.headLength - g.neckIndent)
 
         // Outer corners of the arrowhead.
-        let headLX = baseX + perpX * headWidth / 2
-        let headLY = baseY + perpY * headWidth / 2
-        let headRX = baseX - perpX * headWidth / 2
-        let headRY = baseY - perpY * headWidth / 2
+        let headLX = baseX + g.perpX * g.headWidth / 2
+        let headLY = baseY + g.perpY * g.headWidth / 2
+        let headRX = baseX - g.perpX * g.headWidth / 2
+        let headRY = baseY - g.perpY * g.headWidth / 2
 
         // Where the shaft meets the head (concave base).
-        let neckLX = neckX + perpX * neckHalf
-        let neckLY = neckY + perpY * neckHalf
-        let neckRX = neckX - perpX * neckHalf
-        let neckRY = neckY - perpY * neckHalf
+        let neckLX = neckX + g.perpX * g.neckHalf
+        let neckLY = neckY + g.perpY * g.neckHalf
+        let neckRX = neckX - g.perpX * g.neckHalf
+        let neckRY = neckY - g.perpY * g.neckHalf
 
         if let cp = controlPoint {
             // Curved arrow: draw the tapered shaft as a filled region bounded
@@ -722,12 +728,12 @@ struct ArrowAnnotation: Annotation {
             let cpPerpY = cpTangentX / cpTangentLen
 
             // Width at the control point — linearly between tail and neck.
-            let midHalf = (tailHalf + neckHalf) * 0.5
+            let midHalf = (g.tailHalf + g.neckHalf) * 0.5
 
-            let tailLX = startPoint.x + startPerpX * tailHalf
-            let tailLY = startPoint.y + startPerpY * tailHalf
-            let tailRX = startPoint.x - startPerpX * tailHalf
-            let tailRY = startPoint.y - startPerpY * tailHalf
+            let tailLX = startPoint.x + startPerpX * g.tailHalf
+            let tailLY = startPoint.y + startPerpY * g.tailHalf
+            let tailRX = startPoint.x - startPerpX * g.tailHalf
+            let tailRY = startPoint.y - startPerpY * g.tailHalf
             let cpLX = cp.x + cpPerpX * midHalf
             let cpLY = cp.y + cpPerpY * midHalf
             let cpRX = cp.x - cpPerpX * midHalf
@@ -754,10 +760,10 @@ struct ArrowAnnotation: Annotation {
             // Straight arrow — a single tapered teardrop polygon. Tail is
             // thin, the body widens toward the concave neck, then the head
             // flares out to the wide tip.
-            let tailLX = startPoint.x + perpX * tailHalf
-            let tailLY = startPoint.y + perpY * tailHalf
-            let tailRX = startPoint.x - perpX * tailHalf
-            let tailRY = startPoint.y - perpY * tailHalf
+            let tailLX = startPoint.x + g.perpX * g.tailHalf
+            let tailLY = startPoint.y + g.perpY * g.tailHalf
+            let tailRX = startPoint.x - g.perpX * g.tailHalf
+            let tailRY = startPoint.y - g.perpY * g.tailHalf
 
             context.beginPath()
             context.move(to: endPoint)
@@ -778,47 +784,23 @@ struct ArrowAnnotation: Annotation {
         // tapered body. A small `grab` inflation keeps the thin tail
         // clickable without resorting to a uniform fat spine band that
         // would under-cover the much wider neck at large line widths.
-        let endTangent: (dx: CGFloat, dy: CGFloat)
-        if let cp = controlPoint {
-            endTangent = (endPoint.x - cp.x, endPoint.y - cp.y)
-        } else {
-            endTangent = (endPoint.x - startPoint.x, endPoint.y - startPoint.y)
-        }
-        let length = sqrt(endTangent.dx * endTangent.dx + endTangent.dy * endTangent.dy)
-        guard length > 0 else { return false }
-
-        var headLength: CGFloat = max(22, lineWidth * 6.5)
-        var headWidth: CGFloat = max(22, lineWidth * 7.5)
-        var neckHalf: CGFloat = max(3, lineWidth * 1.4)
-        var tailHalf: CGFloat = max(0.5, lineWidth * 0.25)
-        if length < headLength {
-            let scale = length / headLength
-            headWidth *= scale
-            neckHalf *= scale
-            tailHalf *= scale
-            headLength = length
-        }
-        let neckIndent: CGFloat = headLength * 0.14
+        guard let g = arrowGeometry else { return false }
         let grab: CGFloat = 3
 
-        let unitX = endTangent.dx / length
-        let unitY = endTangent.dy / length
-        let perpX = -unitY
-        let perpY = unitX
-        let baseX = endPoint.x - unitX * headLength
-        let baseY = endPoint.y - unitY * headLength
-        let neckX = endPoint.x - unitX * (headLength - neckIndent)
-        let neckY = endPoint.y - unitY * (headLength - neckIndent)
+        let baseX = endPoint.x - g.unitX * g.headLength
+        let baseY = endPoint.y - g.unitY * g.headLength
+        let neckX = endPoint.x - g.unitX * (g.headLength - g.neckIndent)
+        let neckY = endPoint.y - g.unitY * (g.headLength - g.neckIndent)
 
         // Head polygon — concave swept silhouette, matches draw().
-        let headHalf = headWidth / 2 + grab
-        let neckHitHalf = neckHalf + grab
+        let headHalf = g.headWidth / 2 + grab
+        let neckHitHalf = g.neckHalf + grab
         let head = CGMutablePath()
         head.move(to: endPoint)
-        head.addLine(to: CGPoint(x: baseX + perpX * headHalf, y: baseY + perpY * headHalf))
-        head.addLine(to: CGPoint(x: neckX + perpX * neckHitHalf, y: neckY + perpY * neckHitHalf))
-        head.addLine(to: CGPoint(x: neckX - perpX * neckHitHalf, y: neckY - perpY * neckHitHalf))
-        head.addLine(to: CGPoint(x: baseX - perpX * headHalf, y: baseY - perpY * headHalf))
+        head.addLine(to: CGPoint(x: baseX + g.perpX * headHalf, y: baseY + g.perpY * headHalf))
+        head.addLine(to: CGPoint(x: neckX + g.perpX * neckHitHalf, y: neckY + g.perpY * neckHitHalf))
+        head.addLine(to: CGPoint(x: neckX - g.perpX * neckHitHalf, y: neckY - g.perpY * neckHitHalf))
+        head.addLine(to: CGPoint(x: baseX - g.perpX * headHalf, y: baseY - g.perpY * headHalf))
         head.closeSubpath()
         if head.contains(point) {
             return true
@@ -826,7 +808,7 @@ struct ArrowAnnotation: Annotation {
 
         // Shaft polygon — tapered trapezoid (straight) or tapered bezier
         // band (curved). Mirrors the geometry drawn in `draw(in:bounds:)`.
-        let tailHitHalf = tailHalf + grab
+        let tailHitHalf = g.tailHalf + grab
         let shaft = CGMutablePath()
         if let cp = controlPoint {
             let startDX = cp.x - startPoint.x
@@ -845,10 +827,10 @@ struct ArrowAnnotation: Annotation {
             shaft.move(to: CGPoint(x: startPoint.x + startPerpX * tailHitHalf,
                                    y: startPoint.y + startPerpY * tailHitHalf))
             shaft.addQuadCurve(
-                to: CGPoint(x: neckX + perpX * neckHitHalf, y: neckY + perpY * neckHitHalf),
+                to: CGPoint(x: neckX + g.perpX * neckHitHalf, y: neckY + g.perpY * neckHitHalf),
                 control: CGPoint(x: cp.x + cpPerpX * midHitHalf, y: cp.y + cpPerpY * midHitHalf)
             )
-            shaft.addLine(to: CGPoint(x: neckX - perpX * neckHitHalf, y: neckY - perpY * neckHitHalf))
+            shaft.addLine(to: CGPoint(x: neckX - g.perpX * neckHitHalf, y: neckY - g.perpY * neckHitHalf))
             shaft.addQuadCurve(
                 to: CGPoint(x: startPoint.x - startPerpX * tailHitHalf,
                             y: startPoint.y - startPerpY * tailHitHalf),
@@ -856,12 +838,12 @@ struct ArrowAnnotation: Annotation {
             )
             shaft.closeSubpath()
         } else {
-            shaft.move(to: CGPoint(x: startPoint.x + perpX * tailHitHalf,
-                                   y: startPoint.y + perpY * tailHitHalf))
-            shaft.addLine(to: CGPoint(x: neckX + perpX * neckHitHalf, y: neckY + perpY * neckHitHalf))
-            shaft.addLine(to: CGPoint(x: neckX - perpX * neckHitHalf, y: neckY - perpY * neckHitHalf))
-            shaft.addLine(to: CGPoint(x: startPoint.x - perpX * tailHitHalf,
-                                      y: startPoint.y - perpY * tailHitHalf))
+            shaft.move(to: CGPoint(x: startPoint.x + g.perpX * tailHitHalf,
+                                   y: startPoint.y + g.perpY * tailHitHalf))
+            shaft.addLine(to: CGPoint(x: neckX + g.perpX * neckHitHalf, y: neckY + g.perpY * neckHitHalf))
+            shaft.addLine(to: CGPoint(x: neckX - g.perpX * neckHitHalf, y: neckY - g.perpY * neckHitHalf))
+            shaft.addLine(to: CGPoint(x: startPoint.x - g.perpX * tailHitHalf,
+                                      y: startPoint.y - g.perpY * tailHitHalf))
             shaft.closeSubpath()
         }
         return shaft.contains(point)

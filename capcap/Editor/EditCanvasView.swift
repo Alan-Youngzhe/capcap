@@ -1103,29 +1103,15 @@ class EditCanvasView: NSView {
                 context.addLine(to: current)
                 context.strokePath()
             case .arrow:
-                // Draw line preview
-                context.setLineCap(.round)
-                context.move(to: start)
-                context.addLine(to: current)
-                context.strokePath()
-                // Draw arrowhead preview
-                let dx = current.x - start.x
-                let dy = current.y - start.y
-                let length = sqrt(dx * dx + dy * dy)
-                if length > 0 {
-                    let headLength: CGFloat = max(12, currentLineWidth * 4)
-                    let headWidth: CGFloat = max(8, currentLineWidth * 3)
-                    let unitX = dx / length
-                    let unitY = dy / length
-                    let baseX = current.x - unitX * headLength
-                    let baseY = current.y - unitY * headLength
-                    context.setFillColor(currentColor.cgColor)
-                    context.move(to: current)
-                    context.addLine(to: CGPoint(x: baseX - unitY * headWidth / 2, y: baseY + unitX * headWidth / 2))
-                    context.addLine(to: CGPoint(x: baseX + unitY * headWidth / 2, y: baseY - unitX * headWidth / 2))
-                    context.closePath()
-                    context.fillPath()
-                }
+                // Defer to ArrowAnnotation so the live drag preview is
+                // pixel-identical to the committed shape — anything else
+                // creates a visible snap on mouseUp.
+                ArrowAnnotation(
+                    startPoint: start,
+                    endPoint: current,
+                    color: currentColor,
+                    lineWidth: currentLineWidth
+                ).draw(in: context, bounds: bounds)
             case .magnifier:
                 // Live lens preview — centered on the press point, radius
                 // following the drag, sampling the base image cached when
