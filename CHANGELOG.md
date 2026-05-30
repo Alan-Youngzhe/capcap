@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.26] - 2026-05-30
+
+### Added
+- Add image merge support and localized strings (e7b5da4)
+
+### Fixed
+- Fix image merge thumbnail dragging and auto-scroll (3f66a97)
+- Fix selected annotation style sync and arrow widths (d22acfd)
+
+### Changed
+- Improve editing scale for large preset images (f254e4a)
+- Preserve image size in scaled edit previews (45e8d9d)
+- Support clipboard fallback and persist merge settings (7284dd6)
+- Gate startup on permissions and add Vietnamese locale (662e494)
+- Split DeepLX translation into its own provider (b72a97a)
+- Launch silently at login (6eae743)
+
+### Documentation
+- Add image merge design spec (37db725)
+
 ## [1.3.25] - 2026-05-28
 
 ### Added
