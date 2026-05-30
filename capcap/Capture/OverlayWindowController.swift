@@ -243,18 +243,19 @@ class OverlayWindowController {
         guard let window = windows.first(where: { $0.screen == screen }),
               let selectionView = window.contentView as? SelectionView else { return }
 
-        let imageSize = Self.displaySize(for: presetImage.size, on: screen)
-        let viewBounds = selectionView.bounds
+        let displayMetrics = Self.displayMetrics(for: presetImage.size, on: screen)
+        let imageSize = displayMetrics.viewportSize
+        let visibleRect = Self.visibleRectInSelectionView(for: screen)
         let centeredOrigin = NSPoint(
-            x: (viewBounds.width - imageSize.width) / 2,
-            y: (viewBounds.height - imageSize.height) / 2
+            x: visibleRect.midX - imageSize.width / 2,
+            y: visibleRect.midY - imageSize.height / 2
         )
         let viewRect = NSRect(origin: centeredOrigin, size: imageSize)
 
         selectionView.updateSelectionRect(viewRect)
         selectionView.selectionSizeLabelOverride = Self.scaleLabelText(
             imageSize: presetImage.size,
-            displaySize: imageSize
+            displaySize: displayMetrics.canvasSize
         )
         // Lock immediately so user can't drag/resize a fixed-image canvas.
         selectionView.selectionLocked = true
@@ -297,18 +298,41 @@ class OverlayWindowController {
         return "\(width)x\(height)(\(percent)%)"
     }
 
-    private static func displaySize(for imageSize: NSSize, on screen: NSScreen) -> NSSize {
-        let frame = screen.visibleFrame
-        let horizontalMargin: CGFloat = 60
-        let verticalMargin: CGFloat = 120 // leave room for toolbar above/below
-        let maxWidth = max(200, frame.width - horizontalMargin * 2)
-        let maxHeight = max(200, frame.height - verticalMargin * 2)
+    private struct PresetDisplayMetrics {
+        let viewportSize: NSSize
+        let canvasSize: NSSize
+    }
 
-        guard imageSize.width > 0, imageSize.height > 0 else { return imageSize }
-        let ratio = min(1.0, maxWidth / imageSize.width, maxHeight / imageSize.height)
-        return NSSize(
+    private static func displayMetrics(for imageSize: NSSize, on screen: NSScreen) -> PresetDisplayMetrics {
+        let frame = screen.visibleFrame
+        let maxWidthFraction: CGFloat = 0.70
+        let verticalMargin: CGFloat = 120 // leave room for toolbar above/below
+
+        guard imageSize.width > 0, imageSize.height > 0 else {
+            return PresetDisplayMetrics(viewportSize: imageSize, canvasSize: imageSize)
+        }
+        let maxWidth = max(1, floor(frame.width * maxWidthFraction))
+        let maxViewportHeight = max(1, floor(frame.height - verticalMargin))
+        let ratio = min(1.0, maxWidth / imageSize.width)
+        let canvasSize = NSSize(
             width: max(1, floor(imageSize.width * ratio)),
             height: max(1, floor(imageSize.height * ratio))
+        )
+        let viewportSize = NSSize(
+            width: canvasSize.width,
+            height: min(canvasSize.height, maxViewportHeight)
+        )
+        return PresetDisplayMetrics(viewportSize: viewportSize, canvasSize: canvasSize)
+    }
+
+    private static func visibleRectInSelectionView(for screen: NSScreen) -> NSRect {
+        let screenFrame = screen.frame
+        let visible = screen.visibleFrame
+        return NSRect(
+            x: visible.minX - screenFrame.minX,
+            y: visible.minY - screenFrame.minY,
+            width: visible.width,
+            height: visible.height
         )
     }
 

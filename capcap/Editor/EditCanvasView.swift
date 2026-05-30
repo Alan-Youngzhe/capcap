@@ -1489,7 +1489,7 @@ class EditCanvasView: NSView {
     }
 
     override func scrollWheel(with event: NSEvent) {
-        guard hasPreviewImage else {
+        guard hasPreviewImage || overrideBaseImage != nil else {
             super.scrollWheel(with: event)
             return
         }

@@ -128,16 +128,17 @@ class EditWindowController {
             return
         }
 
+        let canvasSize = canvasContentSize(for: selectionViewRect.size)
         let scrollView = EditorScrollView(frame: selectionViewRect)
         scrollView.drawsBackground = false
         scrollView.borderType = .noBorder
         scrollView.hasHorizontalScroller = false
-        scrollView.hasVerticalScroller = false
+        scrollView.hasVerticalScroller = canvasSize.height > selectionViewRect.height + 0.5
         scrollView.autohidesScrollers = true
         scrollView.scrollerStyle = .overlay
         scrollView.automaticallyAdjustsContentInsets = false
 
-        let canvas = EditCanvasView(frame: NSRect(origin: .zero, size: selectionViewRect.size))
+        let canvas = EditCanvasView(frame: NSRect(origin: .zero, size: canvasSize))
         canvas.captureRect = captureRect
         canvas.captureScreen = screen
         canvas.preSnapshot = preSnapshot
@@ -164,12 +165,13 @@ class EditWindowController {
 
         scrollView.documentView = container
         scrollView.editorCanvasView = canvas
-        scrollView.isInteractionEnabled = false
+        scrollView.isInteractionEnabled = overrideBaseImage != nil
 
         self.canvasScrollView = scrollView
         self.canvasView = canvas
         self.beautifyContainerView = container
         hostSelectionView.addSubview(scrollView)
+        resetCanvasScrollPosition()
 
         // Sits above `scrollView` so the dashed border + handles stay
         // visible when beautify expands the canvas frame with a gradient
@@ -271,7 +273,8 @@ class EditWindowController {
             canvasView?.windowBaseImage = nil
         }
 
-        canvasView?.updateViewportSize(selectionViewRect.size)
+        let canvasSize = canvasContentSize(for: selectionViewRect.size)
+        canvasView?.updateViewportSize(canvasSize)
         beautifyContainerView?.canvasSizeDidChange()
         canvasView?.captureRect = captureRect
         canvasView?.captureScreen = screen
@@ -305,6 +308,23 @@ class EditWindowController {
         updateCanvasFrameForBeautify()
 
         repositionFloatingChrome()
+    }
+
+    private func canvasContentSize(for viewportSize: NSSize) -> NSSize {
+        guard
+            let image = overrideBaseImage,
+            image.size.width > 0,
+            image.size.height > 0,
+            viewportSize.width > 0
+        else {
+            return viewportSize
+        }
+
+        let scale = viewportSize.width / image.size.width
+        return NSSize(
+            width: viewportSize.width,
+            height: max(1, floor(image.size.height * scale))
+        )
     }
 
     private func selectTool(_ tool: EditTool) {
@@ -949,12 +969,36 @@ class EditWindowController {
             canvasScrollView.frame = selectionViewRect
         }
 
-        // Reset scroll offset in case the clip view scrolled during beautify
-        // resize transitions, then re-tile so the scroll view layouts match.
-        canvasScrollView.contentView.setBoundsOrigin(.zero)
-        canvasScrollView.reflectScrolledClipView(canvasScrollView.contentView)
+        updateCanvasScrollAvailability()
+        resetCanvasScrollPosition()
         container.needsDisplay = true
         canvasView.needsDisplay = true
+    }
+
+    private var isCanvasTallerThanViewport: Bool {
+        guard let scrollView = canvasScrollView, let documentView = scrollView.documentView else {
+            return false
+        }
+        return documentView.frame.height > scrollView.contentView.bounds.height + 0.5
+    }
+
+    private func updateCanvasScrollAvailability() {
+        guard let scrollView = canvasScrollView, let documentView = scrollView.documentView else {
+            return
+        }
+        scrollView.hasHorizontalScroller = false
+        scrollView.hasVerticalScroller = documentView.frame.height > scrollView.contentView.bounds.height + 0.5
+    }
+
+    private func resetCanvasScrollPosition() {
+        guard let scrollView = canvasScrollView else { return }
+        updateCanvasScrollAvailability()
+        if isCanvasTallerThanViewport {
+            scrollView.scrollToTop()
+        } else {
+            scrollView.contentView.setBoundsOrigin(.zero)
+            scrollView.reflectScrolledClipView(scrollView.contentView)
+        }
     }
 
     /// The on-screen rect of the canvas/scroll view. When beautify is on this
@@ -973,6 +1017,14 @@ class EditWindowController {
             return selectionViewRect
         }
         let p = container.customPadding ?? BeautifyRenderer.padding(for: container.innerImageSize)
+        if isCanvasTallerThanViewport {
+            return NSRect(
+                x: selectionViewRect.minX - p,
+                y: selectionViewRect.minY - p,
+                width: selectionViewRect.width + 2 * p,
+                height: selectionViewRect.height + 2 * p
+            )
+        }
         return NSRect(
             x: selectionViewRect.minX - p,
             y: selectionViewRect.minY - p,
@@ -1729,6 +1781,7 @@ class EditWindowController {
 
     private func updateEditorInteractionState() {
         let hasPreview = canvasView?.hasPreviewImage == true
+        let hasFixedImage = overrideBaseImage != nil
         // Once the editor is up, the canvas owns clicks inside the selection
         // rect for the entire session — drawing tools, adjust-mode handles,
         // and dragging existing annotations all go through it. The legacy
@@ -1740,8 +1793,8 @@ class EditWindowController {
         // (which sits above the canvas); the SelectionView itself stays
         // available for any clicks that fall outside the gradient frame so the
         // user can still adjust the selection.
-        hostSelectionView?.selectionInteractionEnabled = !(isScrollCapturing || hasPreview)
-        canvasScrollView?.isInteractionEnabled = (activeTool != .none) || hasPreview || isBeautifyActive
+        hostSelectionView?.selectionInteractionEnabled = !(isScrollCapturing || hasPreview || hasFixedImage)
+        canvasScrollView?.isInteractionEnabled = (activeTool != .none) || hasPreview || hasFixedImage || isBeautifyActive
         hostSelectionView?.needsDisplay = true
     }
 
