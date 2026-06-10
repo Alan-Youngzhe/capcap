@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.1] - 2026-06-10
+
+### Added
+- Add agent CLI entrypoint (902ce5c)
+- Add agent skill (eab696c)
+- 支持编辑器切换历史截图 (b6d814e)
+
+### Fixed
+- 修复历史截图切换索引 (5842d47)
+- 保留历史截图切换时的编辑草稿 (4bb5380)
+
+### Changed
+- Add README for capcap agent tools (8a00f33)
+- Refine corner resize cursor (b44ca90)
+
 ## [1.5.0] - 2026-06-06
 
 ### Added
