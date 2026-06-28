@@ -19,8 +19,8 @@
 "historyCacheLabel" = "履歴キャッシュ数";
 "historyCacheHint" = "最近のスクリーンショットを保持し、すばやく再コピーできます";
 "historyPanelDisplayModeLabel" = "履歴パネルの表示方式";
-"historyPanelDisplayModeHint" = "Dialog またはノッチでスクリーンショット履歴を表示";
-"historyPanelDialogMode" = "Dialog";
+"historyPanelDisplayModeHint" = "ダイアログまたはノッチでスクリーンショット履歴を表示";
+"historyPanelDialogMode" = "ダイアログ";
 "historyPanelDialogModeHint" = "メニューまたはショートカットから横スクロールのプレビューパネルを開きます";
 "historyPanelNotchMode" = "ノッチ";
 "historyPanelNotchModeHint" = "上部ノッチにマウスを入れると展開し、離れると自動で隠れます";

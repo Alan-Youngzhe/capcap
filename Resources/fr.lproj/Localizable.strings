@@ -19,8 +19,8 @@
 "historyCacheLabel" = "Taille du cache d'historique";
 "historyCacheHint" = "Conserve les captures récentes pour les recopier rapidement";
 "historyPanelDisplayModeLabel" = "Affichage du panneau d'historique";
-"historyPanelDisplayModeHint" = "Choisir Dialog ou Encoche pour l'historique des captures";
-"historyPanelDialogMode" = "Dialog";
+"historyPanelDisplayModeHint" = "Choisir Dialogue ou Encoche pour l'historique des captures";
+"historyPanelDialogMode" = "Dialogue";
 "historyPanelDialogModeHint" = "Ouvre un panneau d'aperçus horizontaux depuis le menu ou le raccourci";
 "historyPanelNotchMode" = "Encoche";
 "historyPanelNotchModeHint" = "Survolez l'encoche en haut pour développer, quittez pour masquer";

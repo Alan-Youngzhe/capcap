@@ -19,11 +19,11 @@
 "historyCacheLabel" = "Kích thước bộ nhớ lịch sử";
 "historyCacheHint" = "Giữ các ảnh chụp gần đây nhất để sao chép lại nhanh";
 "historyPanelDisplayModeLabel" = "Cách hiển thị bảng lịch sử";
-"historyPanelDisplayModeHint" = "Chọn Dialog hoặc notch để xem lịch sử ảnh chụp";
-"historyPanelDialogMode" = "Dialog";
+"historyPanelDisplayModeHint" = "Chọn Hộp thoại hoặc tai thỏ để xem lịch sử ảnh chụp";
+"historyPanelDialogMode" = "Hộp thoại";
 "historyPanelDialogModeHint" = "Mở bảng xem trước ngang từ menu hoặc phím tắt";
-"historyPanelNotchMode" = "Notch";
-"historyPanelNotchModeHint" = "Di chuột vào notch trên cùng để mở rộng, rời khỏi để ẩn";
+"historyPanelNotchMode" = "Tai thỏ";
+"historyPanelNotchModeHint" = "Di chuột vào tai thỏ trên cùng để mở rộng, rời khỏi để ẩn";
 "countdownLabel" = "Số giây đếm ngược";
 "countdownHint" = "Giữ ⌥ Option rồi nhấn đúp ⌘ hoặc nhấn phím tắt chụp màn hình để bắt đầu đếm ngược trước khi chụp, Esc để hủy";
 "countdownSecondsSuffix" = "giây";

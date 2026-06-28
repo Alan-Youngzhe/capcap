@@ -19,8 +19,8 @@
 "historyCacheLabel" = "Размер кэша истории";
 "historyCacheHint" = "Хранит недавние снимки для быстрого повторного копирования";
 "historyPanelDisplayModeLabel" = "Отображение панели истории";
-"historyPanelDisplayModeHint" = "Выберите Dialog или вырез для истории снимков";
-"historyPanelDialogMode" = "Dialog";
+"historyPanelDisplayModeHint" = "Выберите диалог или вырез для истории снимков";
+"historyPanelDialogMode" = "Диалог";
 "historyPanelDialogModeHint" = "Открывает горизонтальную панель предпросмотра из меню или по сочетанию";
 "historyPanelNotchMode" = "Вырез";
 "historyPanelNotchModeHint" = "Наведение на верхний вырез раскрывает панель, выход скрывает";
