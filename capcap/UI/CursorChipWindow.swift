@@ -3,9 +3,11 @@ import AppKit
 class CursorChipWindow: NSPanel {
     private var globalMonitor: Any?
     private var localMonitor: Any?
+    private let chipView: ChipView
 
     init(text: String = L10n.dragToScreenshot) {
-        let chipSize = NSSize(width: 240, height: 32)
+        let chipSize = ChipView.fittingSize(for: text)
+        self.chipView = ChipView(frame: NSRect(origin: .zero, size: chipSize), text: text)
         super.init(
             contentRect: NSRect(origin: .zero, size: chipSize),
             styleMask: [.borderless, .nonactivatingPanel],
@@ -20,8 +22,17 @@ class CursorChipWindow: NSPanel {
         ignoresMouseEvents = true
         collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
 
-        let chipView = ChipView(frame: NSRect(origin: .zero, size: chipSize), text: text)
         contentView = chipView
+    }
+
+    func updateText(_ text: String) {
+        guard chipView.text != text else { return }
+        let chipSize = ChipView.fittingSize(for: text)
+        setContentSize(chipSize)
+        chipView.frame = NSRect(origin: .zero, size: chipSize)
+        chipView.text = text
+        chipView.needsDisplay = true
+        updatePosition()
     }
 
     func show() {
@@ -50,7 +61,19 @@ class CursorChipWindow: NSPanel {
 }
 
 private class ChipView: NSView {
-    private let text: String
+    private static let minWidth: CGFloat = 240
+    private static let maxWidth: CGFloat = 560
+    private static let height: CGFloat = 32
+    private static let horizontalPadding: CGFloat = 28
+    private static let font = NSFont.systemFont(ofSize: 12, weight: .medium)
+    private static let paragraphStyle: NSParagraphStyle = {
+        let style = NSMutableParagraphStyle()
+        style.alignment = .center
+        style.lineBreakMode = .byTruncatingTail
+        return style
+    }()
+
+    var text: String
 
     init(frame frameRect: NSRect, text: String) {
         self.text = text
@@ -59,6 +82,13 @@ private class ChipView: NSView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    static func fittingSize(for text: String) -> NSSize {
+        let attrs: [NSAttributedString.Key: Any] = [.font: font]
+        let textWidth = ceil(text.size(withAttributes: attrs).width)
+        let width = min(max(minWidth, textWidth + horizontalPadding), maxWidth)
+        return NSSize(width: width, height: height)
     }
 
     override func draw(_ dirtyRect: NSRect) {
@@ -73,15 +103,20 @@ private class ChipView: NSView {
 
         let attrs: [NSAttributedString.Key: Any] = [
             .foregroundColor: NSColor.white.withAlphaComponent(0.85),
-            .font: NSFont.systemFont(ofSize: 12, weight: .medium)
+            .font: Self.font,
+            .paragraphStyle: Self.paragraphStyle
         ]
         let size = text.size(withAttributes: attrs)
         let textRect = NSRect(
-            x: (bounds.width - size.width) / 2,
+            x: Self.horizontalPadding / 2,
             y: (bounds.height - size.height) / 2,
-            width: size.width,
+            width: bounds.width - Self.horizontalPadding,
             height: size.height
         )
-        text.draw(in: textRect, withAttributes: attrs)
+        (text as NSString).draw(
+            with: textRect,
+            options: [.usesLineFragmentOrigin, .truncatesLastVisibleLine],
+            attributes: attrs
+        )
     }
 }

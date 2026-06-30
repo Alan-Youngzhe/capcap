@@ -233,10 +233,18 @@ enum L10n {
 
     // Cursor chip
     static var dragToScreenshot: String { s("dragToScreenshot") }
+    static var dragToScreenshotAspectFree: String { s("dragToScreenshotAspectFree") }
+    static func dragToScreenshotAspect(_ ratio: String) -> String {
+        String(format: s("dragToScreenshotAspect"), ratio)
+    }
     static var dragToTextRecognition: String { s("dragToTextRecognition") }
     static var dragToCopyImageText: String { s("dragToCopyImageText") }
     static var dragToScreenshotTranslation: String { s("dragToScreenshotTranslation") }
     static var dragToRecord: String { s("dragToRecord") }
+    static var dragToRecordAspectFree: String { s("dragToRecordAspectFree") }
+    static func dragToRecordAspect(_ ratio: String) -> String {
+        String(format: s("dragToRecordAspect"), ratio)
+    }
 
     // Toast
     static var copiedToClipboard: String { s("copiedToClipboard") }
@@ -690,6 +698,38 @@ struct Defaults {
     static func clearScreenshotHotkey() {
         defaults.removeObject(forKey: "screenshotHotkeyKeyCode")
         defaults.removeObject(forKey: "screenshotHotkeyModifiers")
+    }
+
+    static let selectionAspectRatioPresets: [CGFloat] = [
+        1.0,
+        2.35,
+        3.0,
+        3.0 / 2.0,
+        4.0 / 3.0,
+        9.0 / 16.0,
+        16.0 / 9.0,
+    ]
+
+    static var selectionAspectRatio: Double {
+        get {
+            let ratio = defaults.double(forKey: "selectionAspectRatio")
+            return ratio > 0 && ratio.isFinite ? ratio : 0
+        }
+        set {
+            guard newValue > 0, newValue.isFinite else {
+                clearSelectionAspectRatio()
+                return
+            }
+            defaults.set(newValue, forKey: "selectionAspectRatio")
+        }
+    }
+
+    static var hasSelectionAspectRatio: Bool {
+        defaults.object(forKey: "selectionAspectRatio") != nil && selectionAspectRatio > 0
+    }
+
+    static func clearSelectionAspectRatio() {
+        defaults.removeObject(forKey: "selectionAspectRatio")
     }
 
     private static func clearLegacyPinHotkey() {

@@ -137,10 +137,14 @@
 
 /* Cursor chip */
 "dragToScreenshot" = "點選視窗或拖曳以截圖";
+"dragToScreenshotAspectFree" = "點選視窗或拖曳以截圖 · 框選自由比例（R）";
+"dragToScreenshotAspect" = "點選視窗或拖曳以截圖 · 框選 %@（R）";
 "dragToTextRecognition" = "點選視窗或框選區域辨識文字";
 "dragToCopyImageText" = "點選視窗或框選區域複製文字";
 "dragToScreenshotTranslation" = "點選視窗或框選區域翻譯內容";
 "dragToRecord" = "點選視窗或拖曳以錄製";
+"dragToRecordAspectFree" = "點選視窗或拖曳以錄製 · 框選自由比例（R）";
+"dragToRecordAspect" = "點選視窗或拖曳以錄製 · 框選 %@（R）";
 
 /* Toast */
 "copiedToClipboard" = "已複製到剪貼簿";

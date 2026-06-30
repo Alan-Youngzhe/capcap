@@ -282,6 +282,7 @@ class OverlayWindowController {
             let selectionView = SelectionView(frame: screen.frame)
             selectionView.delegate = self
             selectionView.windowDetector = windowDetector
+            selectionView.aspectRatio = usesAspectRatioSelection ? Self.persistedSelectionAspectRatio : nil
             if let displayID = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID,
                let snapshot = screenSnapshots[displayID] {
                 selectionView.backgroundSnapshot = NSImage(cgImage: snapshot, size: screen.frame.size)
@@ -310,7 +311,7 @@ class OverlayWindowController {
             }
         }
 
-        chipWindow = CursorChipWindow(text: postCaptureAction.cursorChipText)
+        chipWindow = CursorChipWindow(text: currentCursorChipText)
         chipWindow?.show()
 
         escLocalMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
@@ -340,6 +341,9 @@ class OverlayWindowController {
             }
             if event.keyCode == 53 { // Escape
                 self?.cancel()
+                return nil
+            }
+            if self?.cycleSelectionAspectRatioFromKeyboard(for: event) == true {
                 return nil
             }
             if HotkeyManager.eventMatchesClipboardHotkey(event) {
@@ -391,6 +395,102 @@ class OverlayWindowController {
                 enterPresetSelection()
             }
         }
+    }
+
+    private static var persistedSelectionAspectRatio: CGFloat? {
+        guard Defaults.hasSelectionAspectRatio else { return nil }
+        let ratio = Defaults.selectionAspectRatio
+        guard ratio > 0, ratio.isFinite else { return nil }
+        return CGFloat(ratio)
+    }
+
+    private var currentCursorChipText: String {
+        if usesAspectRatioSelection {
+            return Self.aspectRatioCursorChipText(
+                for: postCaptureAction,
+                aspectRatio: Self.persistedSelectionAspectRatio
+            )
+        }
+        return postCaptureAction.cursorChipText
+    }
+
+    private var usesAspectRatioSelection: Bool {
+        guard presetImage == nil, suspendedDraft == nil else { return false }
+        switch postCaptureAction {
+        case .edit, .record:
+            return true
+        case .textRecognition, .copyImageText, .screenshotTranslation:
+            return false
+        }
+    }
+
+    private static func aspectRatioCursorChipText(for action: PostCaptureAction, aspectRatio: CGFloat?) -> String {
+        switch action {
+        case .edit:
+            guard let aspectRatio else { return L10n.dragToScreenshotAspectFree }
+            return L10n.dragToScreenshotAspect(aspectRatioLabel(for: aspectRatio))
+        case .record:
+            guard let aspectRatio else { return L10n.dragToRecordAspectFree }
+            return L10n.dragToRecordAspect(aspectRatioLabel(for: aspectRatio))
+        case .textRecognition, .copyImageText, .screenshotTranslation:
+            return action.cursorChipText
+        }
+    }
+
+    private static func aspectRatioLabel(for aspectRatio: CGFloat) -> String {
+        let presets: [(CGFloat, String)] = [
+            (1.0, "1:1"),
+            (2.35, "2.35:1"),
+            (3.0, "3:1"),
+            (3.0 / 2.0, "3:2"),
+            (4.0 / 3.0, "4:3"),
+            (9.0 / 16.0, "9:16"),
+            (16.0 / 9.0, "16:9"),
+        ]
+        if let preset = presets.first(where: { abs($0.0 - aspectRatio) < 0.000_001 }) {
+            return preset.1
+        }
+        return String(format: "%.2f:1", Double(aspectRatio))
+    }
+
+    private func cycleSelectionAspectRatioFromKeyboard(for event: NSEvent) -> Bool {
+        guard usesAspectRatioSelection else { return false }
+        guard editController == nil, event.keyCode == 15 else { return false }
+        let modifierMask: NSEvent.ModifierFlags = [.command, .option, .control, .shift]
+        guard event.modifierFlags.intersection(modifierMask).isEmpty else { return false }
+
+        let presets = Defaults.selectionAspectRatioPresets
+        let currentModeIndex: Int
+        if Defaults.hasSelectionAspectRatio {
+            let currentRatio = CGFloat(Defaults.selectionAspectRatio)
+            let presetIndex = presets.firstIndex { abs($0 - currentRatio) < 0.000_001 }
+            currentModeIndex = presetIndex.map { $0 + 1 } ?? 0
+        } else {
+            currentModeIndex = 0
+        }
+
+        let nextModeIndex = (currentModeIndex + 1) % (presets.count + 1)
+        let nextAspectRatio: CGFloat?
+        if nextModeIndex == 0 {
+            Defaults.clearSelectionAspectRatio()
+            nextAspectRatio = nil
+        } else {
+            let ratio = presets[nextModeIndex - 1]
+            Defaults.selectionAspectRatio = Double(ratio)
+            nextAspectRatio = ratio
+        }
+        applySelectionAspectRatio(nextAspectRatio)
+        if usesAspectRatioSelection {
+            chipWindow?.updateText(Self.aspectRatioCursorChipText(for: postCaptureAction, aspectRatio: nextAspectRatio))
+        }
+        return true
+    }
+
+    private func applySelectionAspectRatio(_ aspectRatio: CGFloat?) {
+        for case let selectionView as SelectionView in windows.compactMap(\.contentView) {
+            selectionView.aspectRatio = aspectRatio
+        }
+        activeSelectionView?.aspectRatio = aspectRatio
     }
 
     private static var isRunningEventTrackingMode: Bool {

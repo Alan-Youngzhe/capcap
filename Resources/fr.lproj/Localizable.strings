@@ -137,10 +137,14 @@
 
 /* Cursor chip */
 "dragToScreenshot" = "Cliquez sur une fenêtre ou faites glisser pour capturer";
+"dragToScreenshotAspectFree" = "Cliquez sur une fenêtre ou faites glisser pour capturer · Sélection libre (R)";
+"dragToScreenshotAspect" = "Cliquez sur une fenêtre ou faites glisser pour capturer · Sélection %@ (R)";
 "dragToTextRecognition" = "Cliquez sur une fenêtre ou sélectionnez une zone pour reconnaître le texte";
 "dragToCopyImageText" = "Cliquez sur une fenêtre ou sélectionnez une zone pour copier le texte";
 "dragToScreenshotTranslation" = "Cliquez sur une fenêtre ou sélectionnez une zone pour traduire le contenu";
 "dragToRecord" = "Cliquez sur une fenêtre ou faites glisser pour enregistrer";
+"dragToRecordAspectFree" = "Cliquez sur une fenêtre ou faites glisser pour enregistrer · Sélection libre (R)";
+"dragToRecordAspect" = "Cliquez sur une fenêtre ou faites glisser pour enregistrer · Sélection %@ (R)";
 
 /* Toast */
 "copiedToClipboard" = "Copié dans le presse-papiers";

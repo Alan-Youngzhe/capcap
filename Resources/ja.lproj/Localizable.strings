@@ -137,10 +137,14 @@
 
 /* Cursor chip */
 "dragToScreenshot" = "ウィンドウをクリックまたはドラッグして撮影";
+"dragToScreenshotAspectFree" = "ウィンドウをクリックまたはドラッグして撮影 · ドラッグ自由比率（R）";
+"dragToScreenshotAspect" = "ウィンドウをクリックまたはドラッグして撮影 · ドラッグ %@（R）";
 "dragToTextRecognition" = "ウィンドウをクリックまたは範囲選択して文字認識";
 "dragToCopyImageText" = "ウィンドウをクリックまたは範囲選択してテキストをコピー";
 "dragToScreenshotTranslation" = "ウィンドウをクリックまたは範囲選択して内容を翻訳";
 "dragToRecord" = "ウィンドウをクリックまたはドラッグして録画";
+"dragToRecordAspectFree" = "ウィンドウをクリックまたはドラッグして録画 · ドラッグ自由比率（R）";
+"dragToRecordAspect" = "ウィンドウをクリックまたはドラッグして録画 · ドラッグ %@（R）";
 
 /* Toast */
 "copiedToClipboard" = "クリップボードにコピーしました";

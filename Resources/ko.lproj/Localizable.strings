@@ -137,10 +137,14 @@
 
 /* Cursor chip */
 "dragToScreenshot" = "창을 클릭하거나 드래그하여 스크린샷";
+"dragToScreenshotAspectFree" = "창을 클릭하거나 드래그하여 스크린샷 · 드래그 자유 비율(R)";
+"dragToScreenshotAspect" = "창을 클릭하거나 드래그하여 스크린샷 · 드래그 %@ (R)";
 "dragToTextRecognition" = "창을 클릭하거나 영역을 선택하여 문자 인식";
 "dragToCopyImageText" = "창을 클릭하거나 영역을 선택하여 텍스트 복사";
 "dragToScreenshotTranslation" = "창을 클릭하거나 영역을 선택하여 내용 번역";
 "dragToRecord" = "창을 클릭하거나 드래그하여 녹화";
+"dragToRecordAspectFree" = "창을 클릭하거나 드래그하여 녹화 · 드래그 자유 비율(R)";
+"dragToRecordAspect" = "창을 클릭하거나 드래그하여 녹화 · 드래그 %@ (R)";
 
 /* Toast */
 "copiedToClipboard" = "클립보드에 복사됨";
