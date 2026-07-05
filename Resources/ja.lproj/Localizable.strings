@@ -195,6 +195,7 @@
 "tipSave" = "ファイルへ保存";
 "tipStage" = "サイドバーに一時保管";
 "stageTileHint" = "ドラッグで利用 · ⌥ドラッグでピン留め";
+"shortcutNeedsModifier" = "⌘・⌥・⇧・⌃ のいずれかを含めてください（またはファンクションキー）";
 "tipRecord" = "録画";
 "tipCancel" = "キャンセル";
 "tipConfirm" = "クリップボードへコピー";

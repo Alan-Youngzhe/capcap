@@ -2866,6 +2866,7 @@ class SettingsView: NSView {
             // Reject bare keys (no modifier and not a function key) — the user must
             // hold at least one modifier so the shortcut won't collide with typing.
             if carbonMods == 0 && !HotkeyManager.isFunctionKey(keyCode) {
+                self.shortcutField.stringValue = L10n.shortcutNeedsModifier
                 return nil
             }
 
@@ -2953,6 +2954,7 @@ class SettingsView: NSView {
             let keyCode = UInt32(event.keyCode)
 
             if carbonMods == 0 && !HotkeyManager.isFunctionKey(keyCode) {
+                self.fullScreenScreenshotShortcutField.stringValue = L10n.shortcutNeedsModifier
                 return nil
             }
 
@@ -3040,6 +3042,7 @@ class SettingsView: NSView {
             let keyCode = UInt32(event.keyCode)
 
             if carbonMods == 0 && !HotkeyManager.isFunctionKey(keyCode) {
+                self.colorPickerShortcutField.stringValue = L10n.shortcutNeedsModifier
                 return nil
             }
 
@@ -3127,6 +3130,7 @@ class SettingsView: NSView {
             let keyCode = UInt32(event.keyCode)
 
             if carbonMods == 0 && !HotkeyManager.isFunctionKey(keyCode) {
+                self.selectedImagePinShortcutField.stringValue = L10n.shortcutNeedsModifier
                 return nil
             }
 
@@ -3216,6 +3220,7 @@ class SettingsView: NSView {
             let keyCode = UInt32(event.keyCode)
 
             if carbonMods == 0 && !HotkeyManager.isFunctionKey(keyCode) {
+                self.clipboardImagePinShortcutField.stringValue = L10n.shortcutNeedsModifier
                 return nil
             }
 
@@ -3305,6 +3310,7 @@ class SettingsView: NSView {
             let keyCode = UInt32(event.keyCode)
 
             if carbonMods == 0 && !HotkeyManager.isFunctionKey(keyCode) {
+                self.clipboardTextPinShortcutField.stringValue = L10n.shortcutNeedsModifier
                 return nil
             }
 
@@ -3392,6 +3398,7 @@ class SettingsView: NSView {
             let keyCode = UInt32(event.keyCode)
 
             if carbonMods == 0 && !HotkeyManager.isFunctionKey(keyCode) {
+                self.selectedImageEditShortcutField.stringValue = L10n.shortcutNeedsModifier
                 return nil
             }
 
@@ -3479,6 +3486,7 @@ class SettingsView: NSView {
             let keyCode = UInt32(event.keyCode)
 
             if carbonMods == 0 && !HotkeyManager.isFunctionKey(keyCode) {
+                self.clipboardImageEditShortcutField.stringValue = L10n.shortcutNeedsModifier
                 return nil
             }
 
@@ -3566,6 +3574,7 @@ class SettingsView: NSView {
             let keyCode = UInt32(event.keyCode)
 
             if carbonMods == 0 && !HotkeyManager.isFunctionKey(keyCode) {
+                self.textRecognitionShortcutField.stringValue = L10n.shortcutNeedsModifier
                 return nil
             }
 
@@ -3653,6 +3662,7 @@ class SettingsView: NSView {
             let keyCode = UInt32(event.keyCode)
 
             if carbonMods == 0 && !HotkeyManager.isFunctionKey(keyCode) {
+                self.copyImageTextShortcutField.stringValue = L10n.shortcutNeedsModifier
                 return nil
             }
 
@@ -3740,6 +3750,7 @@ class SettingsView: NSView {
             let keyCode = UInt32(event.keyCode)
 
             if carbonMods == 0 && !HotkeyManager.isFunctionKey(keyCode) {
+                self.screenshotTranslationShortcutField.stringValue = L10n.shortcutNeedsModifier
                 return nil
             }
 
@@ -3827,6 +3838,7 @@ class SettingsView: NSView {
             let keyCode = UInt32(event.keyCode)
 
             if carbonMods == 0 && !HotkeyManager.isFunctionKey(keyCode) {
+                self.recordShortcutField.stringValue = L10n.shortcutNeedsModifier
                 return nil
             }
 
@@ -3914,6 +3926,7 @@ class SettingsView: NSView {
             let keyCode = UInt32(event.keyCode)
 
             if carbonMods == 0 && !HotkeyManager.isFunctionKey(keyCode) {
+                self.imageMergeShortcutField.stringValue = L10n.shortcutNeedsModifier
                 return nil
             }
 

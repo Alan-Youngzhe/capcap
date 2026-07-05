@@ -195,6 +195,7 @@
 "tipSave" = "Save to File";
 "tipStage" = "Stage to Sidebar";
 "stageTileHint" = "Drag out to use · ⌥-drag to pin on screen";
+"shortcutNeedsModifier" = "Include ⌘, ⌥, ⇧ or ⌃ (or use a function key)";
 "tipRecord" = "Record";
 "tipCancel" = "Cancel";
 "tipConfirm" = "Copy to Clipboard";

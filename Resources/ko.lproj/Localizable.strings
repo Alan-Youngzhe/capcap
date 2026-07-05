@@ -195,6 +195,7 @@
 "tipSave" = "파일로 저장";
 "tipStage" = "사이드바에 보관";
 "stageTileHint" = "드래그하여 사용 · ⌥ 드래그로 화면에 고정";
+"shortcutNeedsModifier" = "⌘, ⌥, ⇧, ⌃ 중 하나를 포함하세요(또는 기능 키)";
 "tipRecord" = "녹화";
 "tipCancel" = "취소";
 "tipConfirm" = "클립보드에 복사";

@@ -195,6 +195,7 @@
 "tipSave" = "Enregistrer dans un fichier";
 "tipStage" = "Mettre de côté";
 "stageTileHint" = "Glisser pour utiliser · ⌥-glisser pour épingler";
+"shortcutNeedsModifier" = "Incluez ⌘, ⌥, ⇧ ou ⌃ (ou une touche de fonction)";
 "tipRecord" = "Enregistrer";
 "tipCancel" = "Annuler";
 "tipConfirm" = "Copier dans le presse-papiers";
