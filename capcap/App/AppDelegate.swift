@@ -15,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var recordingCancelLocalMonitor: Any?
     private var recordingCancelGlobalMonitor: Any?
     private var recordingCancelRequested = false
-    private var historyPanelController: HistoryPanelController?
+    private var stageBarController: StageBarController?
     private var countdownActive = false
     private var appInitialized = false
     private var suspendedEditDraft: OverlayWindowController.SuspendedEditDraft?
@@ -101,7 +101,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         ImageMergeLauncher.shared.onContinueEditing = { [weak self] image in
             self?.continueEditingMergedImage(image)
         }
-        historyPanelController = HistoryPanelController()
+        stageBarController = StageBarController()
 
         statusBarController = StatusBarController(
             onTakeScreenshot: { [weak self] in self?.handleTrigger() },
@@ -109,7 +109,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             onRecord: { [weak self] in self?.handleRecordingTrigger() },
             onMergeImages: { [weak self] in self?.handleImageMergeMenuTrigger() },
             onColorPicker: { [weak self] in self?.handleColorPickerTrigger() },
-            onOpenHistoryPanel: { [weak self] in self?.handleHistoryPanelTrigger(holdOpenUntilMouseEnters: true) },
             onOpenSettings: { [weak self] in self?.openSettings() }
         )
         statusBarController.setMenuBarVisible(Defaults.showMenuBar)
@@ -270,14 +269,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             HotkeyManager.shared.unregisterColorPicker()
         }
-
-        if Defaults.hasCustomHistoryPanelHotkey {
-            HotkeyManager.shared.registerHistoryPanel { [weak self] in
-                self?.handleHistoryPanelTrigger(holdOpenUntilMouseEnters: true)
-            }
-        } else {
-            HotkeyManager.shared.unregisterHistoryPanel()
-        }
     }
 
     private func unregisterNonScreenshotHotkeys() {
@@ -293,7 +284,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         HotkeyManager.shared.unregisterImageMerge()
         HotkeyManager.shared.unregisterFullScreenScreenshot()
         HotkeyManager.shared.unregisterColorPicker()
-        HotkeyManager.shared.unregisterHistoryPanel()
     }
 
     @discardableResult
@@ -366,10 +356,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         overlayController = controller
         applyHotkeyState()
         return true
-    }
-
-    private func handleHistoryPanelTrigger(holdOpenUntilMouseEnters: Bool = false) {
-        historyPanelController?.toggleFromUserRequest(holdOpenUntilMouseEnters: holdOpenUntilMouseEnters)
     }
 
     /// KeyMonitor entry point for plain double-tap ⌘. While an overlay is
@@ -494,14 +480,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// a capture overlay is up.
     func handleSelectedImagePinTrigger() {
         guard overlayController == nil, recordingEngine == nil else { return }
-        PinLauncher.pinSelectedImagesIfAvailable()
+        StageLauncher.stageSelectedImagesIfAvailable()
     }
 
     /// Pin-hotkey trigger: pin the clipboard image onto the screen. Skipped
     /// while a capture overlay is up.
     func handleClipboardImagePinTrigger() {
         guard overlayController == nil, recordingEngine == nil else { return }
-        PinLauncher.pinClipboardImageIfAvailable()
+        StageLauncher.stageClipboardImageIfAvailable()
     }
 
     /// Pin-hotkey trigger: render clipboard text into a desktop text pin.

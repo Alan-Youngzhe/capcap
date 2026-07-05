@@ -109,7 +109,9 @@ extension ToolbarItemID {
         case .screenshotTranslate: return "character.bubble"
         case .save:          return "square.and.arrow.down"
         case .upload:        return "icloud.and.arrow.up"
-        case .pin:           return "pin"
+        // The .pin case is kept as the persisted layout ID; the action now
+        // stages into the Stage Bar.
+        case .pin:           return "tray.and.arrow.down"
         case .record:        return "record.circle"
         case .close:         return "xmark"
         case .confirm:       return "checkmark"
@@ -144,7 +146,7 @@ extension ToolbarItemID {
         case .screenshotTranslate: title = L10n.tipScreenshotTranslate
         case .save:          title = L10n.tipSave
         case .upload:        title = L10n.tipUpload
-        case .pin:           title = L10n.tipPin
+        case .pin:           title = L10n.tipStage
         case .record:        title = L10n.tipRecord
         case .close:         title = L10n.tipCancel
         case .confirm:       title = L10n.tipConfirm

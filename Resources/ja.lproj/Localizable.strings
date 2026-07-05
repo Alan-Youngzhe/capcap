@@ -18,12 +18,6 @@
 "historyCacheToggleHint" = "最近のスクリーンショット、取得した色、アップロード結果を保存し、メニューバーからすばやく再コピーできます";
 "historyCacheLabel" = "履歴キャッシュ数";
 "historyCacheHint" = "最近のスクリーンショットを保持し、すばやく再コピーできます";
-"historyPanelDisplayModeLabel" = "履歴パネルの表示方式";
-"historyPanelDisplayModeHint" = "ダイアログまたはノッチでスクリーンショット履歴を表示";
-"historyPanelDialogMode" = "ダイアログ";
-"historyPanelDialogModeHint" = "メニューまたはショートカットから横スクロールのプレビューパネルを開きます";
-"historyPanelNotchMode" = "ノッチ";
-"historyPanelNotchModeHint" = "上部ノッチにマウスを入れると展開し、離れると自動で隠れます";
 "countdownLabel" = "カウントダウン秒数";
 "countdownHint" = "⌥ Option を押しながら ⌘ をダブルタップするか、スクリーンショットのショートカットを押すと、撮影前にカウントダウンが始まります。Esc でキャンセル";
 "countdownSecondsSuffix" = "秒";
@@ -40,20 +34,20 @@
 "shortcutCancel" = "キャンセル";
 "shortcutWaiting" = "キー入力待ち";
 "shortcutRestore" = "デフォルトに戻す";
-"selectedImagePinShortcutHeader" = "選択画像をピン留め";
+"selectedImagePinShortcutHeader" = "選択画像を一時保管";
 "selectedImagePinShortcutDefaultDisplay" = "未設定";
-"selectedImagePinShortcutClear" = "選択画像ピン留めショートカットを消去";
-"clipboardImagePinShortcutHeader" = "クリップボード画像をピン留め";
+"selectedImagePinShortcutClear" = "選択画像一時保管ショートカットを消去";
+"clipboardImagePinShortcutHeader" = "クリップボード画像を一時保管";
 "clipboardImagePinShortcutDefaultDisplay" = "未設定";
-"clipboardImagePinShortcutClear" = "クリップボード画像ピン留めショートカットを消去";
+"clipboardImagePinShortcutClear" = "クリップボード画像一時保管ショートカットを消去";
 "clipboardTextPinShortcutHeader" = "クリップボードテキストをピン留め";
 "clipboardTextPinShortcutDefaultDisplay" = "未設定";
 "clipboardTextPinShortcutClear" = "クリップボードテキストピン留めショートカットを消去";
 "selectedImagePinNoImage" = "Finder で選択中の画像がありません";
 "clipboardImagePinNoImage" = "クリップボードにピン留めできる画像がありません";
 "clipboardTextPinNoText" = "クリップボードにテキストがありません";
-"pinFromFinderHint" = "Finder の画像をピン留めしました。X キーで閉じる";
-"pinFromClipboardHint" = "クリップボードの画像をピン留めしました。X キーで閉じる";
+"pinFromFinderHint" = "Finder の画像をサイドバーに一時保管しました";
+"pinFromClipboardHint" = "クリップボードの画像をサイドバーに一時保管しました";
 "pinFromClipboardTextHint" = "クリップボードのテキストをピン留めしました。ダブルクリックで編集";
 "pinToolbarEdit" = "ピン留め画像を編集";
 "pinToolbarEditText" = "テキストを編集";
@@ -88,21 +82,18 @@
 "fileSaveShortcutHint" = "エディター内で押すと、設定したスクリーンショット保存先へ PNG として保存します。既定は ⌘S";
 "previousHistoryImageShortcutHeader" = "前の履歴スクリーンショット";
 "nextHistoryImageShortcutHeader" = "次の履歴スクリーンショット";
-"historyPanelShortcutHeader" = "履歴パネル";
-"historyPanelShortcutDefaultDisplay" = "未設定";
 
 /* Shortcut conflict */
 "shortcutConflictTitle" = "ショートカットは既に使用中です";
 "shortcutConflictScreenshot" = "このキーの組み合わせはスクリーンショットのショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictCountdown" = "このキーの組み合わせはカウントダウン撮影のショートカット（スクリーンショットのショートカット + ⌥）で既に使用されています。別の組み合わせを選んでください";
-"shortcutConflictSelectedImagePin" = "このキーの組み合わせは選択画像をピン留めのショートカットで既に使用されています。別の組み合わせを選んでください";
-"shortcutConflictClipboardImagePin" = "このキーの組み合わせはクリップボード画像をピン留めのショートカットで既に使用されています。別の組み合わせを選んでください";
+"shortcutConflictSelectedImagePin" = "このキーの組み合わせは選択画像を一時保管のショートカットで既に使用されています。別の組み合わせを選んでください";
+"shortcutConflictClipboardImagePin" = "このキーの組み合わせはクリップボード画像を一時保管のショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictClipboardTextPin" = "このキーの組み合わせはクリップボードテキストをピン留めのショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictClipboard" = "このキーの組み合わせはクリップボードへコピーのショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictFileSave" = "このキーの組み合わせはファイルへ保存のショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictPreviousHistoryImage" = "このキーの組み合わせは前の履歴スクリーンショットのショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictNextHistoryImage" = "このキーの組み合わせは次の履歴スクリーンショットのショートカットで既に使用されています。別の組み合わせを選んでください";
-"shortcutConflictHistoryPanel" = "このキーの組み合わせは履歴パネルのショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictSelectedImageEdit" = "このキーの組み合わせは選択画像を編集のショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictClipboardImageEdit" = "このキーの組み合わせはクリップボード画像を編集のショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictTextRecognition" = "このキーの組み合わせは文字認識ショートカットで既に使用されています。別の組み合わせを選んでください";
@@ -124,17 +115,7 @@
 "historyClear" = "履歴を消去";
 "historyCleared" = "履歴を消去しました";
 "historyShowInFinder" = "Finder に表示";
-"historyPanelMenu" = "履歴パネル";
-"historyPanelFilterAll" = "すべて";
-"historyPanelFilterScreenshots" = "スクリーンショット";
-"historyPanelFilterGIF" = "GIF";
 "historyPanelFilterMP4" = "MP4";
-"historyPanelFilterColors" = "カラー";
-"historyPanelCopyHint" = "クリックでコピー";
-"historyPanelCopyDragHint" = "クリックでコピー · アプリへドラッグ";
-"historyPanelCopyMarkdownLink" = "MD リンクをコピー";
-"historyPanelCopyPlainLink" = "通常リンクをコピー";
-"historyPanelEmpty" = "履歴がありません";
 
 /* Cursor chip */
 "dragToScreenshot" = "ウィンドウをクリックまたはドラッグして撮影";
@@ -212,7 +193,8 @@
 "tipOCR" = "文字認識";
 "tipScreenshotTranslate" = "スクリーンショット翻訳";
 "tipSave" = "ファイルへ保存";
-"tipPin" = "画面に固定";
+"tipStage" = "サイドバーに一時保管";
+"stageTileHint" = "ドラッグで利用 · ⌥ドラッグでピン留め";
 "tipRecord" = "録画";
 "tipCancel" = "キャンセル";
 "tipConfirm" = "クリップボードへコピー";

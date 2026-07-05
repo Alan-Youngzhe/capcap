@@ -18,12 +18,6 @@
 "historyCacheToggleHint" = "Lưu ảnh chụp gần đây, màu đã chọn và liên kết tải lên để sao chép lại nhanh từ thanh menu";
 "historyCacheLabel" = "Kích thước bộ nhớ lịch sử";
 "historyCacheHint" = "Giữ các ảnh chụp gần đây nhất để sao chép lại nhanh";
-"historyPanelDisplayModeLabel" = "Cách hiển thị bảng lịch sử";
-"historyPanelDisplayModeHint" = "Chọn Hộp thoại hoặc tai thỏ để xem lịch sử ảnh chụp";
-"historyPanelDialogMode" = "Hộp thoại";
-"historyPanelDialogModeHint" = "Mở bảng xem trước ngang từ menu hoặc phím tắt";
-"historyPanelNotchMode" = "Tai thỏ";
-"historyPanelNotchModeHint" = "Di chuột vào tai thỏ trên cùng để mở rộng, rời khỏi để ẩn";
 "countdownLabel" = "Số giây đếm ngược";
 "countdownHint" = "Giữ ⌥ Option rồi nhấn đúp ⌘ hoặc nhấn phím tắt chụp màn hình để bắt đầu đếm ngược trước khi chụp, Esc để hủy";
 "countdownSecondsSuffix" = "giây";
@@ -40,20 +34,20 @@
 "shortcutCancel" = "Hủy";
 "shortcutWaiting" = "Nhấn phím";
 "shortcutRestore" = "Khôi phục mặc định";
-"selectedImagePinShortcutHeader" = "Ghim ảnh đã chọn";
+"selectedImagePinShortcutHeader" = "Tạm lưu ảnh đã chọn";
 "selectedImagePinShortcutDefaultDisplay" = "Chưa đặt";
-"selectedImagePinShortcutClear" = "Xóa phím tắt ghim ảnh đã chọn";
-"clipboardImagePinShortcutHeader" = "Ghim ảnh từ clipboard";
+"selectedImagePinShortcutClear" = "Xóa phím tắt tạm lưu ảnh đã chọn";
+"clipboardImagePinShortcutHeader" = "Tạm lưu ảnh từ clipboard";
 "clipboardImagePinShortcutDefaultDisplay" = "Chưa đặt";
-"clipboardImagePinShortcutClear" = "Xóa phím tắt ghim ảnh từ clipboard";
+"clipboardImagePinShortcutClear" = "Xóa phím tắt tạm lưu ảnh từ clipboard";
 "clipboardTextPinShortcutHeader" = "Ghim văn bản từ clipboard";
 "clipboardTextPinShortcutDefaultDisplay" = "Chưa đặt";
 "clipboardTextPinShortcutClear" = "Xóa phím tắt ghim văn bản từ clipboard";
 "selectedImagePinNoImage" = "Chưa chọn ảnh trong Finder";
 "clipboardImagePinNoImage" = "Không có ảnh trong clipboard";
 "clipboardTextPinNoText" = "Clipboard không có văn bản";
-"pinFromFinderHint" = "Đã ghim ảnh từ Finder, nhấn X để đóng";
-"pinFromClipboardHint" = "Đã ghim ảnh từ clipboard, nhấn X để đóng";
+"pinFromFinderHint" = "Đã tạm lưu ảnh từ Finder vào thanh bên";
+"pinFromClipboardHint" = "Đã tạm lưu ảnh từ clipboard vào thanh bên";
 "pinFromClipboardTextHint" = "Đã ghim văn bản từ clipboard, bấm đúp để sửa";
 "pinToolbarEdit" = "Sửa ảnh đã ghim";
 "pinToolbarEditText" = "Sửa văn bản";
@@ -88,21 +82,18 @@
 "fileSaveShortcutHint" = "Nhấn trong trình chỉnh sửa để lưu ảnh chụp dạng PNG vào thư mục ảnh chụp đã đặt. Mặc định là ⌘S";
 "previousHistoryImageShortcutHeader" = "Ảnh chụp lịch sử trước";
 "nextHistoryImageShortcutHeader" = "Ảnh chụp lịch sử tiếp theo";
-"historyPanelShortcutHeader" = "Bảng lịch sử";
-"historyPanelShortcutDefaultDisplay" = "Chưa đặt";
 
 /* Shortcut conflict */
 "shortcutConflictTitle" = "Phím tắt đã được dùng";
 "shortcutConflictScreenshot" = "Tổ hợp phím này đã được dùng cho phím tắt chụp màn hình. Vui lòng chọn tổ hợp khác";
 "shortcutConflictCountdown" = "Tổ hợp phím này đã được dùng cho phím tắt chụp màn hình đếm ngược (phím tắt chụp màn hình + ⌥). Vui lòng chọn tổ hợp khác";
-"shortcutConflictSelectedImagePin" = "Tổ hợp phím này đã được dùng cho phím tắt ghim ảnh đã chọn. Vui lòng chọn tổ hợp khác";
-"shortcutConflictClipboardImagePin" = "Tổ hợp phím này đã được dùng cho phím tắt ghim ảnh từ clipboard. Vui lòng chọn tổ hợp khác";
+"shortcutConflictSelectedImagePin" = "Tổ hợp phím này đã được dùng cho phím tắt tạm lưu ảnh đã chọn. Vui lòng chọn tổ hợp khác";
+"shortcutConflictClipboardImagePin" = "Tổ hợp phím này đã được dùng cho phím tắt tạm lưu ảnh từ clipboard. Vui lòng chọn tổ hợp khác";
 "shortcutConflictClipboardTextPin" = "Tổ hợp phím này đã được dùng cho phím tắt ghim văn bản từ clipboard. Vui lòng chọn tổ hợp khác";
 "shortcutConflictClipboard" = "Tổ hợp phím này đã được dùng cho phím tắt sao chép vào clipboard. Vui lòng chọn tổ hợp khác";
 "shortcutConflictFileSave" = "Tổ hợp phím này đã được dùng cho phím tắt lưu vào tệp. Vui lòng chọn tổ hợp khác";
 "shortcutConflictPreviousHistoryImage" = "Tổ hợp phím này đã được dùng cho phím tắt ảnh chụp lịch sử trước. Vui lòng chọn tổ hợp khác";
 "shortcutConflictNextHistoryImage" = "Tổ hợp phím này đã được dùng cho phím tắt ảnh chụp lịch sử tiếp theo. Vui lòng chọn tổ hợp khác";
-"shortcutConflictHistoryPanel" = "Tổ hợp phím này đã được dùng cho phím tắt bảng lịch sử. Vui lòng chọn tổ hợp khác";
 "shortcutConflictSelectedImageEdit" = "Tổ hợp phím này đã được dùng cho phím tắt chỉnh sửa ảnh đã chọn. Vui lòng chọn tổ hợp khác";
 "shortcutConflictClipboardImageEdit" = "Tổ hợp phím này đã được dùng cho phím tắt chỉnh sửa ảnh từ clipboard. Vui lòng chọn tổ hợp khác";
 "shortcutConflictTextRecognition" = "Tổ hợp phím này đã được dùng cho phím tắt nhận dạng văn bản. Vui lòng chọn tổ hợp khác";
@@ -124,17 +115,7 @@
 "historyClear" = "Xóa lịch sử";
 "historyCleared" = "Đã xóa lịch sử";
 "historyShowInFinder" = "Hiển thị trong Finder";
-"historyPanelMenu" = "Bảng lịch sử";
-"historyPanelFilterAll" = "Tất cả";
-"historyPanelFilterScreenshots" = "Ảnh chụp";
-"historyPanelFilterGIF" = "GIF";
 "historyPanelFilterMP4" = "MP4";
-"historyPanelFilterColors" = "Màu";
-"historyPanelCopyHint" = "Nhấp để sao chép";
-"historyPanelCopyDragHint" = "Nhấp để sao chép · kéo vào ứng dụng";
-"historyPanelCopyMarkdownLink" = "Sao chép liên kết MD";
-"historyPanelCopyPlainLink" = "Sao chép liên kết thường";
-"historyPanelEmpty" = "Chưa có lịch sử";
 
 /* Cursor chip */
 "dragToScreenshot" = "Nhấp vào cửa sổ hoặc kéo để chụp";
@@ -212,7 +193,8 @@
 "tipOCR" = "Nhận dạng văn bản";
 "tipScreenshotTranslate" = "Dịch ảnh chụp màn hình";
 "tipSave" = "Lưu vào tệp";
-"tipPin" = "Ghim lên màn hình";
+"tipStage" = "Tạm lưu vào thanh bên";
+"stageTileHint" = "Kéo ra để dùng · Kéo với ⌥ để ghim";
 "tipRecord" = "Ghi màn hình";
 "tipCancel" = "Hủy";
 "tipConfirm" = "Sao chép vào clipboard";

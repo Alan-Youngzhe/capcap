@@ -18,12 +18,6 @@
 "historyCacheToggleHint" = "Store recent screenshots, picked colors, and upload links for quick reuse from the menu bar";
 "historyCacheLabel" = "History Cache Size";
 "historyCacheHint" = "Keep the most recent screenshots for quick re-copy";
-"historyPanelDisplayModeLabel" = "History Panel Display";
-"historyPanelDisplayModeHint" = "Choose Dialog or Notch for screenshot history";
-"historyPanelDialogMode" = "Dialog";
-"historyPanelDialogModeHint" = "Open a horizontal preview panel from the menu or shortcut";
-"historyPanelNotchMode" = "Notch";
-"historyPanelNotchModeHint" = "Hover near the top notch to expand, leave to hide";
 "countdownLabel" = "Countdown Seconds";
 "countdownHint" = "Hold ⌥ Option then double-tap ⌘ or press the screenshot shortcut to start a countdown before capture, Esc cancels";
 "countdownSecondsSuffix" = "s";
@@ -40,20 +34,20 @@
 "shortcutCancel" = "Cancel";
 "shortcutWaiting" = "Press keys";
 "shortcutRestore" = "Restore Default";
-"selectedImagePinShortcutHeader" = "Pin Selected Image";
+"selectedImagePinShortcutHeader" = "Stage Selected Image";
 "selectedImagePinShortcutDefaultDisplay" = "Not set";
-"selectedImagePinShortcutClear" = "Clear Pin Selected Image Shortcut";
-"clipboardImagePinShortcutHeader" = "Pin Clipboard Image";
+"selectedImagePinShortcutClear" = "Clear Stage Selected Image Shortcut";
+"clipboardImagePinShortcutHeader" = "Stage Clipboard Image";
 "clipboardImagePinShortcutDefaultDisplay" = "Not set";
-"clipboardImagePinShortcutClear" = "Clear Pin Clipboard Image Shortcut";
+"clipboardImagePinShortcutClear" = "Clear Stage Clipboard Image Shortcut";
 "clipboardTextPinShortcutHeader" = "Pin Clipboard Text";
 "clipboardTextPinShortcutDefaultDisplay" = "Not set";
 "clipboardTextPinShortcutClear" = "Clear Pin Clipboard Text Shortcut";
 "selectedImagePinNoImage" = "No Finder image selected";
 "clipboardImagePinNoImage" = "No image on the clipboard";
 "clipboardTextPinNoText" = "No text on the clipboard";
-"pinFromFinderHint" = "Pinned Finder image, press X to close";
-"pinFromClipboardHint" = "Pinned clipboard image, press X to close";
+"pinFromFinderHint" = "Staged Finder images to the sidebar";
+"pinFromClipboardHint" = "Staged clipboard image to the sidebar";
 "pinFromClipboardTextHint" = "Pinned clipboard text, double-click to edit";
 "pinToolbarEdit" = "Edit pinned image";
 "pinToolbarEditText" = "Edit text";
@@ -88,21 +82,18 @@
 "fileSaveShortcutHint" = "Pressed inside the editor to save the screenshot as a PNG in the configured screenshot folder. Defaults to ⌘S";
 "previousHistoryImageShortcutHeader" = "Previous History Screenshot";
 "nextHistoryImageShortcutHeader" = "Next History Screenshot";
-"historyPanelShortcutHeader" = "History Panel";
-"historyPanelShortcutDefaultDisplay" = "Not Set";
 
 /* Shortcut conflict */
 "shortcutConflictTitle" = "Shortcut Already in Use";
 "shortcutConflictScreenshot" = "This key combination is already used by the screenshot shortcut. Please choose a different one";
 "shortcutConflictCountdown" = "This key combination is already used by the countdown screenshot shortcut (screenshot shortcut + ⌥). Please choose a different one";
-"shortcutConflictSelectedImagePin" = "This key combination is already used by the Pin Selected Image shortcut. Please choose a different one";
-"shortcutConflictClipboardImagePin" = "This key combination is already used by the Pin Clipboard Image shortcut. Please choose a different one";
+"shortcutConflictSelectedImagePin" = "This key combination is already used by the Stage Selected Image shortcut. Please choose a different one";
+"shortcutConflictClipboardImagePin" = "This key combination is already used by the Stage Clipboard Image shortcut. Please choose a different one";
 "shortcutConflictClipboardTextPin" = "This key combination is already used by the Pin Clipboard Text shortcut. Please choose a different one";
 "shortcutConflictClipboard" = "This key combination is already used by the Copy to Clipboard shortcut. Please choose a different one";
 "shortcutConflictFileSave" = "This key combination is already used by the Save to File shortcut. Please choose a different one";
 "shortcutConflictPreviousHistoryImage" = "This key combination is already used by the Previous History Screenshot shortcut. Please choose a different one";
 "shortcutConflictNextHistoryImage" = "This key combination is already used by the Next History Screenshot shortcut. Please choose a different one";
-"shortcutConflictHistoryPanel" = "This key combination is already used by the History Panel shortcut. Please choose a different one";
 "shortcutConflictSelectedImageEdit" = "This key combination is already used by the Edit Selected Image shortcut. Please choose a different one";
 "shortcutConflictClipboardImageEdit" = "This key combination is already used by the Edit Clipboard Image shortcut. Please choose a different one";
 "shortcutConflictTextRecognition" = "This key combination is already used by the Text Recognition shortcut. Please choose a different one";
@@ -124,17 +115,7 @@
 "historyClear" = "Clear History";
 "historyCleared" = "History cleared";
 "historyShowInFinder" = "Show in Finder";
-"historyPanelMenu" = "History Panel";
-"historyPanelFilterAll" = "All";
-"historyPanelFilterScreenshots" = "Screenshots";
-"historyPanelFilterGIF" = "GIF";
 "historyPanelFilterMP4" = "MP4";
-"historyPanelFilterColors" = "Colors";
-"historyPanelCopyHint" = "Click to copy";
-"historyPanelCopyDragHint" = "Click to copy · drag into an app";
-"historyPanelCopyMarkdownLink" = "Copy MD link";
-"historyPanelCopyPlainLink" = "Copy plain link";
-"historyPanelEmpty" = "No history yet";
 
 /* Cursor chip */
 "dragToScreenshot" = "Click window or drag to screenshot";
@@ -212,7 +193,8 @@
 "tipOCR" = "Text Recognition";
 "tipScreenshotTranslate" = "Screenshot Translation";
 "tipSave" = "Save to File";
-"tipPin" = "Pin to Screen";
+"tipStage" = "Stage to Sidebar";
+"stageTileHint" = "Drag out to use · ⌥-drag to pin on screen";
 "tipRecord" = "Record";
 "tipCancel" = "Cancel";
 "tipConfirm" = "Copy to Clipboard";

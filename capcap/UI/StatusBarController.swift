@@ -7,7 +7,6 @@ class StatusBarController: NSObject {
     private let onRecord: () -> Void
     private let onMergeImages: () -> Void
     private let onColorPicker: () -> Void
-    private let onOpenHistoryPanel: () -> Void
     private let onOpenSettings: () -> Void
     private var historyMenu: NSMenu?
     private var historyItem: NSMenuItem?
@@ -18,7 +17,6 @@ class StatusBarController: NSObject {
         onRecord: @escaping () -> Void,
         onMergeImages: @escaping () -> Void,
         onColorPicker: @escaping () -> Void,
-        onOpenHistoryPanel: @escaping () -> Void,
         onOpenSettings: @escaping () -> Void
     ) {
         self.onTakeScreenshot = onTakeScreenshot
@@ -26,7 +24,6 @@ class StatusBarController: NSObject {
         self.onRecord = onRecord
         self.onMergeImages = onMergeImages
         self.onColorPicker = onColorPicker
-        self.onOpenHistoryPanel = onOpenHistoryPanel
         self.onOpenSettings = onOpenSettings
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -105,12 +102,6 @@ class StatusBarController: NSObject {
             historyItem = history
             menu.addItem(history)
 
-            let historyPanelItem = NSMenuItem(title: L10n.historyPanelMenu, action: #selector(openHistoryPanel), keyEquivalent: "")
-            historyPanelItem.target = self
-            historyPanelItem.image = Self.menuIcon(systemName: "rectangle.stack")
-            HotkeyManager.applyHistoryPanelToMenuItem(historyPanelItem)
-            menu.addItem(historyPanelItem)
-
             menu.addItem(NSMenuItem.separator())
         } else {
             historyMenu = nil
@@ -185,10 +176,6 @@ class StatusBarController: NSObject {
 
     @objc private func openSettings() {
         onOpenSettings()
-    }
-
-    @objc private func openHistoryPanel() {
-        onOpenHistoryPanel()
     }
 
     /// Builds the update menu item — its title and action track the current

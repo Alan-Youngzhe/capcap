@@ -274,7 +274,7 @@ class EditWindowController {
         tv.onScreenshotTranslate = { [weak self] in self?.performScreenshotTranslation() }
         tv.onSave = { [weak self] in self?.save() }
         tv.onUpload = { [weak self] in self?.upload() }
-        tv.onPin = { [weak self] in self?.pin() }
+        tv.onPin = { [weak self] in self?.stage() }
         tv.onRecord = { [weak self] in self?.record() }
         tv.onClose = { [weak self] in self?.close() }
         tv.onConfirm = { [weak self] in self?.confirm() }
@@ -1841,14 +1841,14 @@ class EditWindowController {
         OCRTranslatePanel.presentScreenshotTranslation(image: baseImage, anchorRect: anchorRect, screen: targetScreen)
     }
 
-    private func pin() {
+    private func stage() {
         canvasView?.commitActiveTextEditing()
         guard let finalImage = currentCompositeImage() else { return }
-
-        PinLauncher.pin(image: finalImage, at: selectionRect.origin)
+        let sourceRect = selectionRect
 
         tearDown()
-        onComplete(nil) // Don't copy to clipboard for pin
+        onComplete(nil) // Don't copy to clipboard for stage
+        StageLauncher.stage(image: finalImage, from: sourceRect)
     }
 
     private func record() {
@@ -2177,7 +2177,7 @@ class EditWindowController {
         case .fill:
             return toggleShapeFillFromKeyboard()
         case .pin:
-            pin()
+            stage()
         case .close:
             close()
         }

@@ -18,12 +18,6 @@
 "historyCacheToggleHint" = "保存最近截圖、取色和上傳結果，方便從選單列快速再次複製";
 "historyCacheLabel" = "歷史快取數量";
 "historyCacheHint" = "保留最近的截圖，方便快速再次複製";
-"historyPanelDisplayModeLabel" = "歷史面板顯示方式";
-"historyPanelDisplayModeHint" = "選擇透過彈窗或瀏海查看歷史截圖";
-"historyPanelDialogMode" = "彈窗";
-"historyPanelDialogModeHint" = "透過選單或快捷鍵開啟橫向預覽面板";
-"historyPanelNotchMode" = "瀏海";
-"historyPanelNotchModeHint" = "滑鼠進入螢幕頂部瀏海自動展開，移出後自動收起";
 "countdownLabel" = "倒數秒數";
 "countdownHint" = "按住 ⌥ Option 後連按兩下 ⌘，或按下截圖快捷鍵，即可先倒數再截圖，按 Esc 取消";
 "countdownSecondsSuffix" = "秒";
@@ -40,20 +34,20 @@
 "shortcutCancel" = "取消";
 "shortcutWaiting" = "請按下按鍵";
 "shortcutRestore" = "恢復預設";
-"selectedImagePinShortcutHeader" = "釘選所選圖片";
+"selectedImagePinShortcutHeader" = "暫存所選圖片";
 "selectedImagePinShortcutDefaultDisplay" = "未設定";
-"selectedImagePinShortcutClear" = "清除釘選所選圖片快捷鍵";
-"clipboardImagePinShortcutHeader" = "釘選剪貼簿圖片";
+"selectedImagePinShortcutClear" = "清除暫存所選圖片快捷鍵";
+"clipboardImagePinShortcutHeader" = "暫存剪貼簿圖片";
 "clipboardImagePinShortcutDefaultDisplay" = "未設定";
-"clipboardImagePinShortcutClear" = "清除釘選剪貼簿圖片快捷鍵";
+"clipboardImagePinShortcutClear" = "清除暫存剪貼簿圖片快捷鍵";
 "clipboardTextPinShortcutHeader" = "釘選剪貼簿文字";
 "clipboardTextPinShortcutDefaultDisplay" = "未設定";
 "clipboardTextPinShortcutClear" = "清除釘選剪貼簿文字快捷鍵";
 "selectedImagePinNoImage" = "Finder 中沒有選取圖片";
 "clipboardImagePinNoImage" = "剪貼簿中沒有圖片";
 "clipboardTextPinNoText" = "剪貼簿中沒有文字";
-"pinFromFinderHint" = "已釘選 Finder 中的圖片，按 X 關閉";
-"pinFromClipboardHint" = "已釘選剪貼簿圖片，按 X 關閉";
+"pinFromFinderHint" = "已暫存 Finder 中的圖片到側欄";
+"pinFromClipboardHint" = "已暫存剪貼簿圖片到側欄";
 "pinFromClipboardTextHint" = "已釘選剪貼簿文字，雙擊可編輯";
 "pinToolbarEdit" = "編輯釘圖";
 "pinToolbarEditText" = "編輯文字";
@@ -88,21 +82,18 @@
 "fileSaveShortcutHint" = "在編輯器中按下後，將截圖以 PNG 儲存到設定的截圖儲存路徑。預設為 ⌘S";
 "previousHistoryImageShortcutHeader" = "上一張歷史截圖";
 "nextHistoryImageShortcutHeader" = "下一張歷史截圖";
-"historyPanelShortcutHeader" = "歷史面板";
-"historyPanelShortcutDefaultDisplay" = "未設定";
 
 /* Shortcut conflict */
 "shortcutConflictTitle" = "快捷鍵已被使用";
 "shortcutConflictScreenshot" = "這組按鍵已用於截圖快捷鍵。請選擇其他組合";
 "shortcutConflictCountdown" = "這組按鍵已用於倒數截圖快捷鍵（截圖快捷鍵 + ⌥）。請選擇其他組合";
-"shortcutConflictSelectedImagePin" = "這組按鍵已用於釘選所選圖片快捷鍵。請選擇其他組合";
-"shortcutConflictClipboardImagePin" = "這組按鍵已用於釘選剪貼簿圖片快捷鍵。請選擇其他組合";
+"shortcutConflictSelectedImagePin" = "這組按鍵已用於暫存所選圖片快捷鍵。請選擇其他組合";
+"shortcutConflictClipboardImagePin" = "這組按鍵已用於暫存剪貼簿圖片快捷鍵。請選擇其他組合";
 "shortcutConflictClipboardTextPin" = "這組按鍵已用於釘選剪貼簿文字快捷鍵，請選擇其他組合";
 "shortcutConflictClipboard" = "這組按鍵已用於複製到剪貼簿快捷鍵。請選擇其他組合";
 "shortcutConflictFileSave" = "這組按鍵已用於儲存為檔案快捷鍵。請選擇其他組合";
 "shortcutConflictPreviousHistoryImage" = "這組按鍵已用於上一張歷史截圖快捷鍵。請選擇其他組合";
 "shortcutConflictNextHistoryImage" = "這組按鍵已用於下一張歷史截圖快捷鍵。請選擇其他組合";
-"shortcutConflictHistoryPanel" = "這組按鍵已用於歷史面板快捷鍵。請選擇其他組合";
 "shortcutConflictSelectedImageEdit" = "這組按鍵已用於編輯所選圖片快捷鍵。請選擇其他組合";
 "shortcutConflictClipboardImageEdit" = "這組按鍵已用於編輯剪貼簿圖片快捷鍵。請選擇其他組合";
 "shortcutConflictTextRecognition" = "這組按鍵已用於文字辨識快捷鍵。請選擇其他組合";
@@ -124,17 +115,7 @@
 "historyClear" = "清除歷史記錄";
 "historyCleared" = "歷史記錄已清除";
 "historyShowInFinder" = "在 Finder 中顯示";
-"historyPanelMenu" = "歷史面板";
-"historyPanelFilterAll" = "全部";
-"historyPanelFilterScreenshots" = "截圖";
-"historyPanelFilterGIF" = "GIF";
 "historyPanelFilterMP4" = "MP4";
-"historyPanelFilterColors" = "顏色";
-"historyPanelCopyHint" = "點選複製";
-"historyPanelCopyDragHint" = "點選複製 · 拖曳到應用";
-"historyPanelCopyMarkdownLink" = "複製 MD 連結";
-"historyPanelCopyPlainLink" = "複製純網址";
-"historyPanelEmpty" = "尚無歷史";
 
 /* Cursor chip */
 "dragToScreenshot" = "點選視窗或拖曳以截圖";
@@ -212,7 +193,8 @@
 "tipOCR" = "文字辨識";
 "tipScreenshotTranslate" = "截圖翻譯";
 "tipSave" = "儲存為檔案";
-"tipPin" = "釘選到螢幕";
+"tipStage" = "暫存到側欄";
+"stageTileHint" = "拖出使用 · ⌥ 拖出釘在螢幕";
 "tipRecord" = "錄製";
 "tipCancel" = "取消";
 "tipConfirm" = "複製到剪貼簿";

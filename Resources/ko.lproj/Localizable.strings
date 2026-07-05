@@ -18,12 +18,6 @@
 "historyCacheToggleHint" = "최근 스크린샷, 선택한 색상, 업로드 결과를 저장해 메뉴 막대에서 빠르게 다시 복사할 수 있습니다";
 "historyCacheLabel" = "기록 캐시 개수";
 "historyCacheHint" = "최근 스크린샷을 보관해 빠르게 다시 복사할 수 있습니다";
-"historyPanelDisplayModeLabel" = "기록 패널 표시 방식";
-"historyPanelDisplayModeHint" = "팝업 또는 노치로 스크린샷 기록 보기";
-"historyPanelDialogMode" = "팝업";
-"historyPanelDialogModeHint" = "메뉴 또는 단축키로 가로 미리보기 패널 열기";
-"historyPanelNotchMode" = "노치";
-"historyPanelNotchModeHint" = "상단 노치에 마우스를 올리면 펼쳐지고 벗어나면 자동으로 숨김";
 "countdownLabel" = "카운트다운 초";
 "countdownHint" = "⌥ Option 을 누른 채 ⌘ 를 두 번 누르거나 스크린샷 단축키를 누르면 캡처 전에 카운트다운이 시작되며 Esc 로 취소";
 "countdownSecondsSuffix" = "초";
@@ -40,20 +34,20 @@
 "shortcutCancel" = "취소";
 "shortcutWaiting" = "키 입력 대기 중";
 "shortcutRestore" = "기본값 복원";
-"selectedImagePinShortcutHeader" = "선택 이미지 고정";
+"selectedImagePinShortcutHeader" = "선택 이미지 보관";
 "selectedImagePinShortcutDefaultDisplay" = "설정 안 됨";
-"selectedImagePinShortcutClear" = "선택 이미지 고정 단축키 지우기";
-"clipboardImagePinShortcutHeader" = "클립보드 이미지 고정";
+"selectedImagePinShortcutClear" = "선택 이미지 보관 단축키 지우기";
+"clipboardImagePinShortcutHeader" = "클립보드 이미지 보관";
 "clipboardImagePinShortcutDefaultDisplay" = "설정 안 됨";
-"clipboardImagePinShortcutClear" = "클립보드 이미지 고정 단축키 지우기";
+"clipboardImagePinShortcutClear" = "클립보드 이미지 보관 단축키 지우기";
 "clipboardTextPinShortcutHeader" = "클립보드 텍스트 고정";
 "clipboardTextPinShortcutDefaultDisplay" = "설정 안 됨";
 "clipboardTextPinShortcutClear" = "클립보드 텍스트 고정 단축키 지우기";
 "selectedImagePinNoImage" = "Finder에서 선택한 이미지가 없습니다";
 "clipboardImagePinNoImage" = "클립보드에 고정할 이미지가 없습니다";
 "clipboardTextPinNoText" = "클립보드에 텍스트가 없습니다";
-"pinFromFinderHint" = "Finder 이미지를 고정했습니다. X 키를 눌러 닫기";
-"pinFromClipboardHint" = "클립보드 이미지를 고정했습니다. X 키를 눌러 닫기";
+"pinFromFinderHint" = "Finder 이미지를 사이드바에 보관했습니다";
+"pinFromClipboardHint" = "클립보드 이미지를 사이드바에 보관했습니다";
 "pinFromClipboardTextHint" = "클립보드 텍스트를 고정했습니다. 더블 클릭하여 편집";
 "pinToolbarEdit" = "고정 이미지 편집";
 "pinToolbarEditText" = "텍스트 편집";
@@ -88,21 +82,18 @@
 "fileSaveShortcutHint" = "편집기에서 누르면 설정된 스크린샷 폴더에 PNG로 저장합니다. 기본값은 ⌘S입니다";
 "previousHistoryImageShortcutHeader" = "이전 기록 스크린샷";
 "nextHistoryImageShortcutHeader" = "다음 기록 스크린샷";
-"historyPanelShortcutHeader" = "기록 패널";
-"historyPanelShortcutDefaultDisplay" = "설정 안 됨";
 
 /* Shortcut conflict */
 "shortcutConflictTitle" = "단축키가 이미 사용 중입니다";
 "shortcutConflictScreenshot" = "이 키 조합은 이미 스크린샷 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictCountdown" = "이 키 조합은 이미 카운트다운 스크린샷 단축키(스크린샷 단축키 + ⌥)에 사용되고 있습니다. 다른 조합을 선택하세요";
-"shortcutConflictSelectedImagePin" = "이 키 조합은 이미 선택 이미지 고정 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
-"shortcutConflictClipboardImagePin" = "이 키 조합은 이미 클립보드 이미지 고정 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
+"shortcutConflictSelectedImagePin" = "이 키 조합은 이미 선택 이미지 보관 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
+"shortcutConflictClipboardImagePin" = "이 키 조합은 이미 클립보드 이미지 보관 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictClipboardTextPin" = "이 키 조합은 이미 클립보드 텍스트 고정 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictClipboard" = "이 키 조합은 이미 클립보드에 복사 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictFileSave" = "이 키 조합은 이미 파일로 저장 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictPreviousHistoryImage" = "이 키 조합은 이미 이전 기록 스크린샷 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictNextHistoryImage" = "이 키 조합은 이미 다음 기록 스크린샷 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
-"shortcutConflictHistoryPanel" = "이 키 조합은 이미 기록 패널 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictSelectedImageEdit" = "이 키 조합은 이미 선택 이미지 편집 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictClipboardImageEdit" = "이 키 조합은 이미 클립보드 이미지 편집 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictTextRecognition" = "이 키 조합은 이미 문자 인식 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
@@ -124,17 +115,7 @@
 "historyClear" = "기록 지우기";
 "historyCleared" = "기록 지움";
 "historyShowInFinder" = "Finder에 표시";
-"historyPanelMenu" = "기록 패널";
-"historyPanelFilterAll" = "전체";
-"historyPanelFilterScreenshots" = "스크린샷";
-"historyPanelFilterGIF" = "GIF";
 "historyPanelFilterMP4" = "MP4";
-"historyPanelFilterColors" = "색상";
-"historyPanelCopyHint" = "클릭해 복사";
-"historyPanelCopyDragHint" = "클릭해 복사 · 앱으로 드래그";
-"historyPanelCopyMarkdownLink" = "MD 링크 복사";
-"historyPanelCopyPlainLink" = "일반 링크 복사";
-"historyPanelEmpty" = "기록 없음";
 
 /* Cursor chip */
 "dragToScreenshot" = "창을 클릭하거나 드래그하여 스크린샷";
@@ -212,7 +193,8 @@
 "tipOCR" = "문자 인식";
 "tipScreenshotTranslate" = "스크린샷 번역";
 "tipSave" = "파일로 저장";
-"tipPin" = "화면에 고정";
+"tipStage" = "사이드바에 보관";
+"stageTileHint" = "드래그하여 사용 · ⌥ 드래그로 화면에 고정";
 "tipRecord" = "녹화";
 "tipCancel" = "취소";
 "tipConfirm" = "클립보드에 복사";

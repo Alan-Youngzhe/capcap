@@ -65,35 +65,6 @@ enum PinLauncher {
     private static let stackOffset = NSSize(width: 28, height: -28)
     private static let maxDistinctStackOffsets = 8
 
-    /// Pins images currently selected in Finder. This shortcut is intentionally
-    /// source-specific: it does not fall back to the clipboard.
-    @discardableResult
-    static func pinSelectedImagesIfAvailable() -> Bool {
-        let finderImages = FinderSelection.currentImageFileURLs().compactMap(loadImage)
-        guard !finderImages.isEmpty else {
-            ToastWindow.show(message: L10n.selectedImagePinNoImage)
-            return false
-        }
-
-        pin(images: finderImages, source: .finder)
-        ToastWindow.show(message: L10n.pinFromFinderHint)
-        return true
-    }
-
-    /// Pins the image currently on the clipboard. This shortcut is
-    /// source-specific: it does not check the Finder selection.
-    @discardableResult
-    static func pinClipboardImageIfAvailable() -> Bool {
-        guard let image = ClipboardImageSource.currentImage() else {
-            ToastWindow.show(message: L10n.clipboardImagePinNoImage)
-            return false
-        }
-
-        pin(image: image, source: .clipboard)
-        ToastWindow.show(message: L10n.pinFromClipboardHint)
-        return true
-    }
-
     /// Pins plain text currently on the clipboard as an editable text view.
     @discardableResult
     static func pinClipboardTextIfAvailable() -> Bool {
@@ -144,19 +115,18 @@ enum PinLauncher {
         makeTextWindow(text: previewText, size: fittedSize, origin: frameOrigin, source: source)
     }
 
-    private static func pin(images: [NSImage], source: PinSource) {
+    /// Pins `images` as floating windows centered on `point` — used when a
+    /// Stage Bar drag ends on empty screen space. Multiple images fan out from
+    /// the point like the multi-image hotkey path; origins are clamped so a
+    /// release near a screen edge stays fully visible.
+    static func pin(images: [NSImage], centeredAt point: NSPoint) {
         let screen = activeScreen()
-        let pins = images.compactMap { image -> (image: NSImage, size: NSSize)? in
+        for (index, image) in images.enumerated() {
             let size = fittedSize(for: image.size, on: screen)
-            guard size.width > 0, size.height > 0 else { return nil }
-            return (image, size)
-        }
-        guard let first = pins.first else { return }
-
-        let baseOrigin = centeredOrigin(for: first.size, on: screen)
-        for (index, pin) in pins.enumerated() {
-            let origin = stackedOrigin(baseOrigin: baseOrigin, index: index, size: pin.size, on: screen)
-            makeWindow(image: pin.image, size: pin.size, origin: origin, source: source)
+            guard size.width > 0, size.height > 0 else { continue }
+            let base = NSPoint(x: point.x - size.width / 2, y: point.y - size.height / 2)
+            let origin = stackedOrigin(baseOrigin: base, index: index, size: size, on: screen)
+            makeWindow(image: image, size: size, origin: origin, source: nil)
         }
     }
 
@@ -245,14 +215,6 @@ enum PinLauncher {
         return NSScreen.screens.first(where: { $0.frame.contains(cursor) })
             ?? NSScreen.main
             ?? NSScreen.screens[0]
-    }
-
-    private static func loadImage(from url: URL) -> NSImage? {
-        guard let data = try? Data(contentsOf: url),
-              let image = NSImage.imagePreservingPixelDimensions(from: data),
-              image.size.width > 0, image.size.height > 0
-        else { return nil }
-        return image
     }
 
     /// Scales `size` down to fit within the active screen (with a margin),
@@ -1341,6 +1303,9 @@ final class PinContentView: NSView {
         toolbar.onOCR = { [weak self] in
             self?.toggleOCRSelection()
         }
+        toolbar.onStage = { [weak self] in
+            self?.stagePinnedImage()
+        }
         toolbar.onMoveMouseDown = { [weak self] event in
             self?.pinWindow?.performDrag(with: event)
         }
@@ -1364,6 +1329,16 @@ final class PinContentView: NSView {
         }
         addSubview(navigator)
         addSubview(toolbar)
+    }
+
+    /// Sweeps this pinned image back into the Stage Bar: the window flies
+    /// into the bar's collapsed strip and the item becomes a staged tile.
+    private func stagePinnedImage() {
+        guard let image, let pinWindow else { return }
+        let imageToStage = image.copy() as? NSImage ?? image
+        let sourceRect = pinWindow.frame
+        pinWindow.dismiss()
+        StageLauncher.stage(image: imageToStage, from: sourceRect)
     }
 
     private func editPinnedImage() {
@@ -2342,12 +2317,13 @@ private final class PinNavigatorView: NSView {
 // MARK: - Pin Toolbar
 
 private final class PinToolbarView: NSView {
-    static let preferredWidth: CGFloat = 258
-    static let minimumWidth: CGFloat = 220
+    static let preferredWidth: CGFloat = 290
+    static let minimumWidth: CGFloat = 252
     static let preferredHeight: CGFloat = 34
 
     var onEdit: (() -> Void)?
     var onOCR: (() -> Void)?
+    var onStage: (() -> Void)?
     var onMoveMouseDown: ((NSEvent) -> Void)?
     var onZoomOut: (() -> Void)?
     var onZoomIn: (() -> Void)?
@@ -2364,6 +2340,7 @@ private final class PinToolbarView: NSView {
 
     private let editButton = PinToolbarIconButton(symbolName: "pencil", accessibilityLabel: L10n.pinToolbarEdit)
     private let ocrButton = PinToolbarIconButton(symbolName: "text.viewfinder", accessibilityLabel: L10n.tipOCR)
+    private let stageButton = PinToolbarIconButton(symbolName: "tray.and.arrow.down", accessibilityLabel: L10n.tipStage)
     private let moveButton = PinToolbarMoveButton(symbolName: "arrow.up.and.down.and.arrow.left.and.right",
                                                   accessibilityLabel: "Move pinned image")
     private let zoomOutButton = PinToolbarIconButton(symbolName: "minus", accessibilityLabel: "Zoom out")
@@ -2391,6 +2368,9 @@ private final class PinToolbarView: NSView {
         ocrButton.toolTip = L10n.tipOCR
         ocrButton.target = self
         ocrButton.action = #selector(ocrTapped)
+        stageButton.toolTip = L10n.tipStage
+        stageButton.target = self
+        stageButton.action = #selector(stageTapped)
         moveButton.onMouseDown = { [weak self] event in
             self?.onMoveMouseDown?(event)
         }
@@ -2413,6 +2393,7 @@ private final class PinToolbarView: NSView {
         addSubview(moveButton)
         addSubview(editButton)
         addSubview(ocrButton)
+        addSubview(stageButton)
         addSubview(zoomOutButton)
         addSubview(zoomLabel)
         addSubview(zoomInButton)
@@ -2447,9 +2428,15 @@ private final class PinToolbarView: NSView {
             width: buttonSide,
             height: buttonSide
         )
+        stageButton.frame = NSRect(
+            x: ocrButton.frame.minX - buttonGap - buttonSide,
+            y: buttonY,
+            width: buttonSide,
+            height: buttonSide
+        )
 
         let centerX = closeButton.frame.maxX + gap
-        let centerWidth = max(76, ocrButton.frame.minX - gap - centerX)
+        let centerWidth = max(76, stageButton.frame.minX - gap - centerX)
         let stepWidth = min(24, max(20, centerWidth * 0.22))
         let labelWidth = max(36, centerWidth - stepWidth * 2)
 
@@ -2496,6 +2483,10 @@ private final class PinToolbarView: NSView {
 
     @objc private func ocrTapped() {
         onOCR?()
+    }
+
+    @objc private func stageTapped() {
+        onStage?()
     }
 
     @objc private func zoomOutTapped() {

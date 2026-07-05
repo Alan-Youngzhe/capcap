@@ -18,12 +18,6 @@
 "historyCacheToggleHint" = "Enregistre les captures récentes, les couleurs prélevées et les liens téléversés pour les recopier depuis la barre de menus";
 "historyCacheLabel" = "Taille du cache d'historique";
 "historyCacheHint" = "Conserve les captures récentes pour les recopier rapidement";
-"historyPanelDisplayModeLabel" = "Affichage du panneau d'historique";
-"historyPanelDisplayModeHint" = "Choisir Dialogue ou Encoche pour l'historique des captures";
-"historyPanelDialogMode" = "Dialogue";
-"historyPanelDialogModeHint" = "Ouvre un panneau d'aperçus horizontaux depuis le menu ou le raccourci";
-"historyPanelNotchMode" = "Encoche";
-"historyPanelNotchModeHint" = "Survolez l'encoche en haut pour développer, quittez pour masquer";
 "countdownLabel" = "Secondes du compte à rebours";
 "countdownHint" = "Maintenez ⌥ Option puis double-appuyez sur ⌘ ou utilisez le raccourci de capture pour lancer un compte à rebours avant la capture, Échap pour annuler";
 "countdownSecondsSuffix" = "s";
@@ -40,20 +34,20 @@
 "shortcutCancel" = "Annuler";
 "shortcutWaiting" = "Appuyez sur des touches";
 "shortcutRestore" = "Réinitialiser";
-"selectedImagePinShortcutHeader" = "Épingler l'image sélectionnée";
+"selectedImagePinShortcutHeader" = "Mettre de côté l'image sélectionnée";
 "selectedImagePinShortcutDefaultDisplay" = "Non défini";
-"selectedImagePinShortcutClear" = "Effacer le raccourci d'épinglage de l'image sélectionnée";
-"clipboardImagePinShortcutHeader" = "Épingler l'image du presse-papiers";
+"selectedImagePinShortcutClear" = "Effacer le raccourci de mise de côté de l'image sélectionnée";
+"clipboardImagePinShortcutHeader" = "Mettre de côté l'image du presse-papiers";
 "clipboardImagePinShortcutDefaultDisplay" = "Non défini";
-"clipboardImagePinShortcutClear" = "Effacer le raccourci d'épinglage du presse-papiers";
+"clipboardImagePinShortcutClear" = "Effacer le raccourci de mise de côté du presse-papiers";
 "clipboardTextPinShortcutHeader" = "Épingler le texte du presse-papiers";
 "clipboardTextPinShortcutDefaultDisplay" = "Non défini";
 "clipboardTextPinShortcutClear" = "Effacer le raccourci d'épinglage du texte du presse-papiers";
 "selectedImagePinNoImage" = "Aucune image Finder sélectionnée";
 "clipboardImagePinNoImage" = "Aucune image à épingler dans le presse-papiers";
 "clipboardTextPinNoText" = "Aucun texte dans le presse-papiers";
-"pinFromFinderHint" = "Image Finder épinglée, appuyez sur X pour fermer";
-"pinFromClipboardHint" = "Image du presse-papiers épinglée, appuyez sur X pour fermer";
+"pinFromFinderHint" = "Images Finder mises de côté dans la barre latérale";
+"pinFromClipboardHint" = "Image du presse-papiers mise de côté dans la barre latérale";
 "pinFromClipboardTextHint" = "Texte du presse-papiers épinglé, double-cliquez pour modifier";
 "pinToolbarEdit" = "Modifier l'image épinglée";
 "pinToolbarEditText" = "Modifier le texte";
@@ -88,21 +82,18 @@
 "fileSaveShortcutHint" = "Appuyez dessus dans l'éditeur pour enregistrer la capture en PNG dans le dossier de captures configuré. ⌘S par défaut";
 "previousHistoryImageShortcutHeader" = "Capture précédente de l'historique";
 "nextHistoryImageShortcutHeader" = "Capture suivante de l'historique";
-"historyPanelShortcutHeader" = "Panneau d'historique";
-"historyPanelShortcutDefaultDisplay" = "Non défini";
 
 /* Shortcut conflict */
 "shortcutConflictTitle" = "Raccourci déjà utilisé";
 "shortcutConflictScreenshot" = "Cette combinaison de touches est déjà utilisée par le raccourci de capture d'écran. Veuillez en choisir une autre";
 "shortcutConflictCountdown" = "Cette combinaison de touches est déjà utilisée par le raccourci de capture avec compte à rebours (raccourci de capture + ⌥). Veuillez en choisir une autre";
-"shortcutConflictSelectedImagePin" = "Cette combinaison de touches est déjà utilisée par le raccourci d'épinglage de l'image sélectionnée. Veuillez en choisir une autre";
-"shortcutConflictClipboardImagePin" = "Cette combinaison de touches est déjà utilisée par le raccourci d'épinglage de l'image du presse-papiers. Veuillez en choisir une autre";
+"shortcutConflictSelectedImagePin" = "Cette combinaison de touches est déjà utilisée par le raccourci de mise de côté de l'image sélectionnée. Veuillez en choisir une autre";
+"shortcutConflictClipboardImagePin" = "Cette combinaison de touches est déjà utilisée par le raccourci de mise de côté de l'image du presse-papiers. Veuillez en choisir une autre";
 "shortcutConflictClipboardTextPin" = "Cette combinaison de touches est déjà utilisée par le raccourci d'épinglage du texte du presse-papiers. Veuillez en choisir une autre";
 "shortcutConflictClipboard" = "Cette combinaison de touches est déjà utilisée par le raccourci de copie dans le presse-papiers. Veuillez en choisir une autre";
 "shortcutConflictFileSave" = "Cette combinaison de touches est déjà utilisée par le raccourci d'enregistrement dans un fichier. Veuillez en choisir une autre";
 "shortcutConflictPreviousHistoryImage" = "Cette combinaison de touches est déjà utilisée par le raccourci Capture précédente de l'historique. Veuillez en choisir une autre";
 "shortcutConflictNextHistoryImage" = "Cette combinaison de touches est déjà utilisée par le raccourci Capture suivante de l'historique. Veuillez en choisir une autre";
-"shortcutConflictHistoryPanel" = "Cette combinaison de touches est déjà utilisée par le raccourci Panneau d'historique. Veuillez en choisir une autre";
 "shortcutConflictSelectedImageEdit" = "Cette combinaison de touches est déjà utilisée par le raccourci Modifier l'image sélectionnée. Veuillez en choisir une autre";
 "shortcutConflictClipboardImageEdit" = "Cette combinaison de touches est déjà utilisée par le raccourci Modifier l'image du presse-papiers. Veuillez en choisir une autre";
 "shortcutConflictTextRecognition" = "Cette combinaison de touches est déjà utilisée par le raccourci Reconnaissance de texte. Veuillez en choisir une autre";
@@ -124,17 +115,7 @@
 "historyClear" = "Effacer l'historique";
 "historyCleared" = "Historique effacé";
 "historyShowInFinder" = "Afficher dans le Finder";
-"historyPanelMenu" = "Panneau d'historique";
-"historyPanelFilterAll" = "Tout";
-"historyPanelFilterScreenshots" = "Captures";
-"historyPanelFilterGIF" = "GIF";
 "historyPanelFilterMP4" = "MP4";
-"historyPanelFilterColors" = "Couleurs";
-"historyPanelCopyHint" = "Cliquez pour copier";
-"historyPanelCopyDragHint" = "Cliquez pour copier · faites glisser vers une app";
-"historyPanelCopyMarkdownLink" = "Copier le lien MD";
-"historyPanelCopyPlainLink" = "Copier l'URL simple";
-"historyPanelEmpty" = "Aucun historique";
 
 /* Cursor chip */
 "dragToScreenshot" = "Cliquez sur une fenêtre ou faites glisser pour capturer";
@@ -212,7 +193,8 @@
 "tipOCR" = "Reconnaissance de texte";
 "tipScreenshotTranslate" = "Traduction de capture";
 "tipSave" = "Enregistrer dans un fichier";
-"tipPin" = "Épingler à l'écran";
+"tipStage" = "Mettre de côté";
+"stageTileHint" = "Glisser pour utiliser · ⌥-glisser pour épingler";
 "tipRecord" = "Enregistrer";
 "tipCancel" = "Annuler";
 "tipConfirm" = "Copier dans le presse-papiers";

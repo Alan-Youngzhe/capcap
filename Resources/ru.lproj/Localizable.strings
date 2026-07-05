@@ -18,12 +18,6 @@
 "historyCacheToggleHint" = "Сохраняет недавние снимки, выбранные цвета и ссылки загрузок для быстрого повторного копирования из строки меню";
 "historyCacheLabel" = "Размер кэша истории";
 "historyCacheHint" = "Хранит недавние снимки для быстрого повторного копирования";
-"historyPanelDisplayModeLabel" = "Отображение панели истории";
-"historyPanelDisplayModeHint" = "Выберите диалог или вырез для истории снимков";
-"historyPanelDialogMode" = "Диалог";
-"historyPanelDialogModeHint" = "Открывает горизонтальную панель предпросмотра из меню или по сочетанию";
-"historyPanelNotchMode" = "Вырез";
-"historyPanelNotchModeHint" = "Наведение на верхний вырез раскрывает панель, выход скрывает";
 "countdownLabel" = "Секунды обратного отсчёта";
 "countdownHint" = "Удерживайте ⌥ Option, затем дважды нажмите ⌘ или сочетание для снимка, чтобы запустить обратный отсчёт перед захватом, Esc — отмена";
 "countdownSecondsSuffix" = "с";
@@ -40,20 +34,20 @@
 "shortcutCancel" = "Отмена";
 "shortcutWaiting" = "Нажмите клавиши";
 "shortcutRestore" = "Сбросить";
-"selectedImagePinShortcutHeader" = "Закрепить выбранное изображение";
+"selectedImagePinShortcutHeader" = "Отложить выбранное изображение";
 "selectedImagePinShortcutDefaultDisplay" = "Не задано";
-"selectedImagePinShortcutClear" = "Очистить сочетание закрепления выбранного изображения";
-"clipboardImagePinShortcutHeader" = "Закрепить изображение из буфера";
+"selectedImagePinShortcutClear" = "Очистить сочетание откладывания выбранного изображения";
+"clipboardImagePinShortcutHeader" = "Отложить изображение из буфера";
 "clipboardImagePinShortcutDefaultDisplay" = "Не задано";
-"clipboardImagePinShortcutClear" = "Очистить сочетание закрепления изображения из буфера";
+"clipboardImagePinShortcutClear" = "Очистить сочетание откладывания изображения из буфера";
 "clipboardTextPinShortcutHeader" = "Закрепить текст из буфера";
 "clipboardTextPinShortcutDefaultDisplay" = "Не задано";
 "clipboardTextPinShortcutClear" = "Очистить сочетание закрепления текста из буфера";
 "selectedImagePinNoImage" = "В Finder не выбрано изображение";
 "clipboardImagePinNoImage" = "В буфере нет изображения для закрепления";
 "clipboardTextPinNoText" = "В буфере нет текста";
-"pinFromFinderHint" = "Изображение Finder закреплено, нажмите X, чтобы закрыть";
-"pinFromClipboardHint" = "Изображение из буфера закреплено, нажмите X, чтобы закрыть";
+"pinFromFinderHint" = "Изображения Finder отложены в боковую панель";
+"pinFromClipboardHint" = "Изображение из буфера отложено в боковую панель";
 "pinFromClipboardTextHint" = "Текст из буфера закреплен, дважды щелкните для редактирования";
 "pinToolbarEdit" = "Редактировать закрепленное изображение";
 "pinToolbarEditText" = "Редактировать текст";
@@ -88,21 +82,18 @@
 "fileSaveShortcutHint" = "Нажмите в редакторе, чтобы сохранить снимок PNG в заданную папку снимков. По умолчанию — ⌘S";
 "previousHistoryImageShortcutHeader" = "Предыдущий снимок из истории";
 "nextHistoryImageShortcutHeader" = "Следующий снимок из истории";
-"historyPanelShortcutHeader" = "Панель истории";
-"historyPanelShortcutDefaultDisplay" = "Не задано";
 
 /* Shortcut conflict */
 "shortcutConflictTitle" = "Сочетание уже используется";
 "shortcutConflictScreenshot" = "Это сочетание клавиш уже назначено для снимка экрана. Выберите другое";
 "shortcutConflictCountdown" = "Это сочетание клавиш уже назначено для снимка экрана с обратным отсчётом (сочетание для снимка + ⌥). Выберите другое";
-"shortcutConflictSelectedImagePin" = "Это сочетание клавиш уже назначено для закрепления выбранного изображения. Выберите другое";
-"shortcutConflictClipboardImagePin" = "Это сочетание клавиш уже назначено для закрепления изображения из буфера. Выберите другое";
+"shortcutConflictSelectedImagePin" = "Это сочетание клавиш уже назначено для откладывания выбранного изображения. Выберите другое";
+"shortcutConflictClipboardImagePin" = "Это сочетание клавиш уже назначено для откладывания изображения из буфера. Выберите другое";
 "shortcutConflictClipboardTextPin" = "Это сочетание клавиш уже назначено для закрепления текста из буфера. Выберите другое";
 "shortcutConflictClipboard" = "Это сочетание клавиш уже назначено для копирования в буфер обмена. Выберите другое";
 "shortcutConflictFileSave" = "Это сочетание клавиш уже назначено для сохранения в файл. Выберите другое";
 "shortcutConflictPreviousHistoryImage" = "Это сочетание клавиш уже назначено для предыдущего снимка из истории. Выберите другое";
 "shortcutConflictNextHistoryImage" = "Это сочетание клавиш уже назначено для следующего снимка из истории. Выберите другое";
-"shortcutConflictHistoryPanel" = "Это сочетание клавиш уже назначено для панели истории. Выберите другое";
 "shortcutConflictSelectedImageEdit" = "Это сочетание клавиш уже назначено для редактирования выбранного изображения. Выберите другое";
 "shortcutConflictClipboardImageEdit" = "Это сочетание клавиш уже назначено для редактирования изображения из буфера. Выберите другое";
 "shortcutConflictTextRecognition" = "Это сочетание клавиш уже назначено для распознавания текста. Выберите другое";
@@ -124,17 +115,7 @@
 "historyClear" = "Очистить историю";
 "historyCleared" = "История очищена";
 "historyShowInFinder" = "Показать в Finder";
-"historyPanelMenu" = "Панель истории";
-"historyPanelFilterAll" = "Все";
-"historyPanelFilterScreenshots" = "Снимки";
-"historyPanelFilterGIF" = "GIF";
 "historyPanelFilterMP4" = "MP4";
-"historyPanelFilterColors" = "Цвета";
-"historyPanelCopyHint" = "Нажмите для копирования";
-"historyPanelCopyDragHint" = "Нажмите для копирования · перетащите в приложение";
-"historyPanelCopyMarkdownLink" = "Скопировать MD-ссылку";
-"historyPanelCopyPlainLink" = "Скопировать обычную ссылку";
-"historyPanelEmpty" = "История пуста";
 
 /* Cursor chip */
 "dragToScreenshot" = "Нажмите на окно или перетащите для снимка";
@@ -212,7 +193,8 @@
 "tipOCR" = "Распознавание текста";
 "tipScreenshotTranslate" = "Перевод снимка";
 "tipSave" = "Сохранить в файл";
-"tipPin" = "Закрепить на экране";
+"tipStage" = "Отложить в боковую панель";
+"stageTileHint" = "Перетащите для использования · ⌥-перетаскивание — закрепить";
 "tipRecord" = "Запись";
 "tipCancel" = "Отмена";
 "tipConfirm" = "Копировать в буфер";
