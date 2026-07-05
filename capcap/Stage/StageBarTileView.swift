@@ -39,8 +39,6 @@ final class StageBarTileView: NSView, NSDraggingSource {
         layer?.masksToBounds = true
         layer?.backgroundColor = NSColor.white.withAlphaComponent(0.08).cgColor
 
-        toolTip = L10n.stageTileHint
-
         imageView.image = item.image
         imageView.imageScaling = .scaleProportionallyDown
         imageView.unregisterDraggedTypes()
@@ -99,11 +97,40 @@ final class StageBarTileView: NSView, NSDraggingSource {
     override func mouseEntered(with event: NSEvent) {
         isHovered = true
         refreshOverlays()
+        showHintTooltip()
     }
 
     override func mouseExited(with event: NSEvent) {
         isHovered = false
         refreshOverlays()
+        ToolTipWindow.hide()
+    }
+
+    override func viewWillMove(toWindow newWindow: NSWindow?) {
+        super.viewWillMove(toWindow: newWindow)
+        if newWindow == nil {
+            ToolTipWindow.hide()
+        }
+    }
+
+    /// The system `toolTip` takes seconds to appear; use the app's own dark
+    /// tooltip with a short (but not instant) delay instead. The anchor is
+    /// nudged left when needed so the tip stays on screen next to the bar.
+    private func showHintTooltip() {
+        guard let window else { return }
+        let text = L10n.stageTileHint
+        var anchor = window.convertToScreen(convert(bounds, to: nil))
+        let attrs: [NSAttributedString.Key: Any] = [
+            .font: NSFont.systemFont(ofSize: 11, weight: .medium)
+        ]
+        let tipWidth = ceil(text.size(withAttributes: attrs).width) + 16
+        if let screen = window.screen {
+            let overflow = anchor.midX + tipWidth / 2 - (screen.visibleFrame.maxX - 8)
+            if overflow > 0 {
+                anchor.origin.x -= overflow
+            }
+        }
+        ToolTipWindow.show(text: text, anchor: anchor, delay: 0.45)
     }
 
     func setSelectionOrder(_ order: Int?) {
@@ -122,6 +149,7 @@ final class StageBarTileView: NSView, NSDraggingSource {
     // MARK: Mouse & drag
 
     override func mouseDown(with event: NSEvent) {
+        ToolTipWindow.hide()
         mouseDownPoint = convert(event.locationInWindow, from: nil)
         didStartDrag = false
         didRequestCollapseForDrag = false
