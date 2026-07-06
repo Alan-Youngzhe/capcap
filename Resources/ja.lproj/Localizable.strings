@@ -39,6 +39,7 @@
 "shortcutSet" = "記録";
 "shortcutCancel" = "キャンセル";
 "shortcutWaiting" = "キー入力待ち";
+"shortcutNeedsModifierTitle" = "修飾キーが必要です";
 "shortcutNeedsModifier" = "⌘・⌥・⇧・⌃ と他のキーの組み合わせ（例：⌘⇧8）、または F1–F12 単独";
 "shortcutRestore" = "デフォルトに戻す";
 "selectedImagePinShortcutHeader" = "選択画像をピン留め";

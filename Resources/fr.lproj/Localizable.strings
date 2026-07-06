@@ -39,6 +39,7 @@
 "shortcutSet" = "Définir";
 "shortcutCancel" = "Annuler";
 "shortcutWaiting" = "Appuyez sur des touches";
+"shortcutNeedsModifierTitle" = "Un modificateur est requis";
 "shortcutNeedsModifier" = "Combinez ⌘/⌥/⇧/⌃ et une autre touche (ex. ⌘⇧8), ou F1–F12 seule";
 "shortcutRestore" = "Réinitialiser";
 "selectedImagePinShortcutHeader" = "Épingler l'image sélectionnée";

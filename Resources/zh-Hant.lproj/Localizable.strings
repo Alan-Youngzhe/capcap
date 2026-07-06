@@ -39,6 +39,7 @@
 "shortcutSet" = "設定";
 "shortcutCancel" = "取消";
 "shortcutWaiting" = "請按下按鍵";
+"shortcutNeedsModifierTitle" = "快捷鍵需要修飾鍵";
 "shortcutNeedsModifier" = "需要組合鍵：⌘/⌥/⇧/⌃ + 其他按鍵（如 ⌘⇧8），或單獨按 F1–F12";
 "shortcutRestore" = "恢復預設";
 "selectedImagePinShortcutHeader" = "釘選所選圖片";

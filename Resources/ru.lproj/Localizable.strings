@@ -39,6 +39,7 @@
 "shortcutSet" = "Задать";
 "shortcutCancel" = "Отмена";
 "shortcutWaiting" = "Нажмите клавиши";
+"shortcutNeedsModifierTitle" = "Требуется клавиша-модификатор";
 "shortcutNeedsModifier" = "Сочетание ⌘/⌥/⇧/⌃ + другая клавиша (например ⌘⇧8) или F1–F12";
 "shortcutRestore" = "Сбросить";
 "selectedImagePinShortcutHeader" = "Закрепить выбранное изображение";

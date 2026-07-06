@@ -39,6 +39,7 @@
 "shortcutSet" = "Set";
 "shortcutCancel" = "Cancel";
 "shortcutWaiting" = "Press keys";
+"shortcutNeedsModifierTitle" = "Shortcut Needs a Modifier";
 "shortcutNeedsModifier" = "Use ⌘/⌥/⇧/⌃ plus another key (e.g. ⌘⇧8), or F1–F12 alone";
 "shortcutRestore" = "Restore Default";
 "selectedImagePinShortcutHeader" = "Pin Selected Image";

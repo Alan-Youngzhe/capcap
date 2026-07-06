@@ -2936,7 +2936,8 @@ class SettingsView: NSView {
     /// this is shown.
     private func presentShortcutNeedsModifierAlert() {
         let alert = NSAlert()
-        alert.messageText = L10n.shortcutNeedsModifier
+        alert.messageText = L10n.shortcutNeedsModifierTitle
+        alert.informativeText = L10n.shortcutNeedsModifier
         alert.alertStyle = .warning
         if let win = self.window {
             alert.beginSheetModal(for: win, completionHandler: nil)

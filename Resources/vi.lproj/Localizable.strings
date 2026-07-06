@@ -39,6 +39,7 @@
 "shortcutSet" = "Đặt";
 "shortcutCancel" = "Hủy";
 "shortcutWaiting" = "Nhấn phím";
+"shortcutNeedsModifierTitle" = "Cần phím bổ trợ";
 "shortcutNeedsModifier" = "Tổ hợp ⌘/⌥/⇧/⌃ + phím khác (vd: ⌘⇧8), hoặc riêng F1–F12";
 "shortcutRestore" = "Khôi phục mặc định";
 "selectedImagePinShortcutHeader" = "Ghim ảnh đã chọn";

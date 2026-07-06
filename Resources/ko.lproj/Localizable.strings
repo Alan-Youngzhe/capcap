@@ -39,6 +39,7 @@
 "shortcutSet" = "기록";
 "shortcutCancel" = "취소";
 "shortcutWaiting" = "키 입력 대기 중";
+"shortcutNeedsModifierTitle" = "수정자 키가 필요합니다";
 "shortcutNeedsModifier" = "⌘/⌥/⇧/⌃ + 다른 키 조합(예: ⌘⇧8) 또는 F1–F12 단독";
 "shortcutRestore" = "기본값 복원";
 "selectedImagePinShortcutHeader" = "선택 이미지 고정";

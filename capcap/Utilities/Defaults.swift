@@ -140,6 +140,7 @@ enum L10n {
     static var shortcutSet: String { s("shortcutSet") }
     static var shortcutCancel: String { s("shortcutCancel") }
     static var shortcutWaiting: String { s("shortcutWaiting") }
+    static var shortcutNeedsModifierTitle: String { s("shortcutNeedsModifierTitle") }
     static var shortcutNeedsModifier: String { s("shortcutNeedsModifier") }
     static var shortcutRestore: String { s("shortcutRestore") }
 
