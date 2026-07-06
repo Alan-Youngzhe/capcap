@@ -195,6 +195,7 @@
 "tipSave" = "파일로 저장";
 "tipStage" = "사이드바에 보관";
 "stageTileHint" = "드래그하여 사용 · ⌥ 드래그로 화면에 고정";
+"shortcutNeedsModifierTitle" = "수정자 키가 필요합니다";
 "shortcutNeedsModifier" = "⌘/⌥/⇧/⌃ + 다른 키 조합(예: ⌘⇧8) 또는 F1–F12 단독";
 "tipRecord" = "녹화";
 "tipCancel" = "취소";

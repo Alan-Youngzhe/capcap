@@ -195,6 +195,7 @@
 "tipSave" = "Save to File";
 "tipStage" = "Stage to Sidebar";
 "stageTileHint" = "Drag out to use · ⌥-drag to pin on screen";
+"shortcutNeedsModifierTitle" = "Shortcut Needs a Modifier";
 "shortcutNeedsModifier" = "Use ⌘/⌥/⇧/⌃ plus another key (e.g. ⌘⇧8), or F1–F12 alone";
 "tipRecord" = "Record";
 "tipCancel" = "Cancel";

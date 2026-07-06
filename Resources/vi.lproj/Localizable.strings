@@ -195,6 +195,7 @@
 "tipSave" = "Lưu vào tệp";
 "tipStage" = "Tạm lưu vào thanh bên";
 "stageTileHint" = "Kéo ra để dùng · Kéo với ⌥ để ghim";
+"shortcutNeedsModifierTitle" = "Cần phím bổ trợ";
 "shortcutNeedsModifier" = "Tổ hợp ⌘/⌥/⇧/⌃ + phím khác (vd: ⌘⇧8), hoặc riêng F1–F12";
 "tipRecord" = "Ghi màn hình";
 "tipCancel" = "Hủy";

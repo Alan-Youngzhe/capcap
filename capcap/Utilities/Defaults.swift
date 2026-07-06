@@ -323,6 +323,7 @@ enum L10n {
     static var tipSave: String { s("tipSave") }
     static var tipStage: String { s("tipStage") }
     static var stageTileHint: String { s("stageTileHint") }
+    static var shortcutNeedsModifierTitle: String { s("shortcutNeedsModifierTitle") }
     static var shortcutNeedsModifier: String { s("shortcutNeedsModifier") }
     static var tipRecord: String { s("tipRecord") }
     static var tipCancel: String { s("tipCancel") }
