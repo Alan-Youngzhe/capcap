@@ -195,7 +195,7 @@
 "tipSave" = "保存到文件";
 "tipStage" = "暂存到侧栏";
 "stageTileHint" = "拖出使用 · ⌥ 拖出钉在屏幕";
-"shortcutNeedsModifier" = "需包含 ⌘、⌥、⇧ 或 ⌃（或使用功能键）";
+"shortcutNeedsModifier" = "需要组合键：⌘/⌥/⇧/⌃ + 其他按键（如 ⌘⇧8），或单独按 F1–F12";
 "tipRecord" = "录制";
 "tipCancel" = "取消";
 "tipConfirm" = "复制到剪贴板";
